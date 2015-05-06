@@ -24,9 +24,9 @@
   </developers>
 
   <scm>
-    <connection>scm:git:git@github.com:jsdevel/java-testng-selenium.git</connection>
-    <developerConnection>scm:git:git@github.com:jsdevel/java-testng-selenium.git</developerConnection>
-    <url>git@github.com:jsdevel/java-testng-selenium.git</url>
+    <connection>scm:git:jsdevel@github.com:jsdevel/java-testng-selenium.git</connection>
+    <developerConnection>scm:git:jsdevel@github.com:jsdevel/java-testng-selenium.git</developerConnection>
+    <url>jsdevel@github.com:jsdevel/java-testng-selenium.git</url>
     <tag>testng-selenium-0.5.0</tag>
   </scm>
 
