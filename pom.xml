@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.jsdevel</groupId>
   <artifactId>testng-selenium</artifactId>
-  <version>0.5.0</version>
+  <version>0.5.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>TestNG Selenium</name>
   <description>A library for easy TestNG Selenium testing.</description>
