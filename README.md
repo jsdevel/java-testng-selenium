@@ -1,2 +1,2 @@
-# java-selenium-commons
-A common set of selenium helpers written in Java.
+# java-testng-selenium
+A library for easy TestNG Selenium testing.
