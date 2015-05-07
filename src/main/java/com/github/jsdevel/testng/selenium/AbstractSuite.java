@@ -5,11 +5,12 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
 /**
- * An AbstractSuite that is thread safe and allows methods to be run in
- * parallel.
+ * An AbstractSuite that is thread safe, allows methods to be run in
+ * parallel, and instantiates relevant test Types such as AbstractPageFactory
+ * and WebDriver.
  * 
  * @author Joe Spencer
- * @param <PF> The PageFactory type.
+ * @param <PF> The PageFactory type used to instantiate Pages during tests.
  */
 public class AbstractSuite<PF extends AbstractPageFactory> {
   private final ThreadLocal<MethodContext<PF>> methodContext = new ThreadLocal();
@@ -31,8 +32,15 @@ public class AbstractSuite<PF extends AbstractPageFactory> {
   @AfterMethod(alwaysRun = true)
   public void afterMethod() {
     MethodContext<PF> context = methodContext.get();
-    for (String line: context.getOutput()) {
-      TestNGSeleniumLogger.log(line);
+
+    if (context == null) {
+      return; 
+    }
+
+    if (context.getOutput() != null) {
+      for (String line: context.getOutput()) {
+        TestNGSeleniumLogger.log(line);
+      }
     }
 
     methodContext.remove();

@@ -3,15 +3,13 @@ package com.github.jsdevel.testng.selenium;
 import com.github.jsdevel.testng.selenium.annotations.drivers.Chrome;
 import com.github.jsdevel.testng.selenium.annotations.drivers.Firefox;
 import com.github.jsdevel.testng.selenium.annotations.drivers.InternetExplorer;
-import com.github.jsdevel.testng.selenium.annotations.suites.PageFactory;
 import com.github.jsdevel.testng.selenium.exceptions.MissingPageFactoryException;
 import com.github.jsdevel.testng.selenium.exceptions.PageFactoryInstantiationException;
 import java.io.File;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import net.anthavio.phanbedder.Phanbedder;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -26,21 +24,25 @@ class AbsractSuiteHelpers {
 
   static <PF extends AbstractPageFactory> void addPageFactory(MethodContext context) {
     Class<?> suite = context.method.getDeclaringClass();
-    PageFactory pageFactoryAnnotation = suite.getAnnotation(PageFactory.class);
+    ParameterizedType abstractSuite;
 
-    if (pageFactoryAnnotation == null) {
+    try {
+       abstractSuite = (ParameterizedType)suite.getGenericSuperclass();
+    } catch (ClassCastException e) {
       throw new MissingPageFactoryException(
-          "testng-selenium suites must be annotated with a page factory.  " +
-          "None found for " + suite.getCanonicalName());
+          "AbstractSuite must receive Type parameters I.E. class MySuite " +
+          "extends AbstractSuite<MyPageFactory>.  None were given in " +
+          suite.getName());
     }
 
     try {
-      PF pageFactory = (PF) pageFactoryAnnotation.value().newInstance();
+      Class<PF> pageFactoryClass = (Class<PF>) abstractSuite.getActualTypeArguments()[0];
+      PF pageFactory = (PF) pageFactoryClass.newInstance();
       pageFactory.setMethodContext(context);
       pageFactory.setEndoint(EnvironmentConfig.ENDPOINT);
       pageFactory.setWebDriver(context.getWebDriver());
       context.setPageFactory(pageFactory);
-    } catch (InstantiationException | IllegalAccessException e) {
+    } catch (InstantiationException | IllegalAccessException | ClassCastException e) {
       throw new PageFactoryInstantiationException(e);
     }
   } 
@@ -64,13 +66,13 @@ class AbsractSuiteHelpers {
   }
 
   private static void addFirefoxDriver(MethodContext context) {
-    FirefoxDriver driver = new FirefoxDriver();
-    context.setWebDriver(driver);
+    /*FirefoxDriver driver = new FirefoxDriver();
+    context.setWebDriver(driver);*/
   }
 
   private static void addInternetExplorerDriver(MethodContext context) {
-    InternetExplorerDriver driver = new InternetExplorerDriver();
-    context.setWebDriver(driver);
+    /*InternetExplorerDriver driver = new InternetExplorerDriver();
+    context.setWebDriver(driver);*/
   }
 
   private static void addPhantomJSDriver(MethodContext context) {
