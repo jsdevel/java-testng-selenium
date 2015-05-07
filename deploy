@@ -1,2 +1,2 @@
 #!/bin/bash
-mvn clean deploy -Dtestng.selenium.endpoint=https://google.com
+mvn clean deploy
