@@ -3,5 +3,5 @@ mvn release:clean release:prepare release:perform
 git push origin master
 rm -rf /tmp/apidocs
 mv target/apidocs /tmp
-git check gh-pages
+git checkout gh-pages
 cp -R /tmp/apidocs/* .
