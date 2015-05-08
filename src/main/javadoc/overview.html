@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset=UTF8>
+    <title>TestNG Selenium Overview</title>
+  </head>
+  <body>
+    <h2>Getting Started</h2>
+    First thing you need to do is get testng-selenium on your class path.
+    <br/>
+    For maven users it's as easy as adding this to your dependencies:
+    <br/>
+    <script src="https://gist.github.com/jsdevel/9b3638c9a10472234e73.js"></script>
+    <br/>
+    In each of your suite classes, extend <code>AbstractSuite</code> like this:
+    <br/>
+    <script src="https://gist.github.com/jsdevel/a1b0bd45673077b997e4.js"></script>
+    <br/>
+    <code>AbstractSuite</code> provides suites with a <code>getPageFactory</code>
+    method to create the page factories passed in as a type parameter.  In this example,
+    the page factory passed as a generic type on line 7 is returned by
+    <code>getPageFactory</code>.
+    <br/>
+    Now let's look at <code>MyPageFactory</code>:
+    <br/>
+    <script src="https://gist.github.com/jsdevel/ccf7b410397f3e59fddb.js"></script>
+    <br/>
+    Each method declared in a <code>PageFactory</code> should return a sub class of
+    <code>Page</code>.  This allows testng-selenium to initialize your page objects,
+    by doing some cool things, like navigating to them when <code>WebDriver</code>
+    has been created.  See
+    <a href="#pageInitializationPhase">Page Initialization</a> for more details.
+    <br/>
+    Ok, back to this page factory business.  How is testng-selenium able to construct
+    a page factory from an interface?  Simple, Dynamic Proxies.
+    <br/>
+
+    <h2 id=pageInitializationPhase>Page Initialization</h2>
+  </body>
+</html>
