@@ -1,12 +1,12 @@
 package com.github.jsdevel.testng.selenium.fixtures;
 
-import com.github.jsdevel.testng.selenium.AbstractPage;
+import com.github.jsdevel.testng.selenium.Page;
+import java.net.URL;
 
-public class SampleHomePage extends AbstractPage<SampleHomePage> {
+public class SampleHomePage extends Page<SampleHomePage> {
 
   @Override
-  public SampleHomePage assertPageIsViewableFrom(String proposedUrl) {
-    assertCurrentUrlPathStartsWith("/");
-    return this;
+  protected boolean assertPageIsViewableFrom(URL proposedUrl) {
+    return proposedUrl.getPath().startsWith("/");
   }
 }

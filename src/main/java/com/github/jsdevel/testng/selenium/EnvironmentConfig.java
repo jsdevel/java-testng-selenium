@@ -6,7 +6,7 @@ package com.github.jsdevel.testng.selenium;
  * 
  * @author Joe Spencer
  */
-class EnvironmentConfig {
+public class EnvironmentConfig {
   public static final String ENDPOINT = System.getProperty(
       SystemProperties.ENDPOINT);
   public static final String LOGGING_PREFIX = System.getProperty(

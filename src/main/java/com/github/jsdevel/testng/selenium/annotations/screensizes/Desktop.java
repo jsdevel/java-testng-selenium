@@ -7,9 +7,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Using this annotation with @Test will cause the current MethodContext to
- * receive a WebDriver instance set to Desktop dimension 992x600 (based off of
- * bootstrap breakpoints).
+ * Using this annotation with {@link org.testng.annotations.Test} will cause the
+ * current {@link com.github.jsdevel.testng.selenium.MethodContext} to receive a
+ * {@link org.openqa.selenium.WebDriver} instance set to Desktop
+ * dimension 992x600 (based off of bootstrap breakpoints).
  * 
  * @author Joseph Spencer
  */

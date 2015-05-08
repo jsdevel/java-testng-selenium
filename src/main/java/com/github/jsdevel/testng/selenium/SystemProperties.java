@@ -3,6 +3,9 @@ package com.github.jsdevel.testng.selenium;
 /**
  * Constants representing system property names recognized by testng-selenium.
  * 
+ * @see EnvironmentConfig
+ * @see EnvironmentDefaults
+ * 
  * @author Joe Spencer
  */
 public class SystemProperties {

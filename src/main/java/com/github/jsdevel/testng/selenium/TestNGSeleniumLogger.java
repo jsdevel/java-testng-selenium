@@ -1,7 +1,9 @@
 package com.github.jsdevel.testng.selenium;
 
 /**
- * A logger that prefixes output with TestNG-Selenium.
+ * A logger that prefixes output.
+ * 
+ * @see EnvironmentConfig
  * 
  * @author Joe Spencer
  */

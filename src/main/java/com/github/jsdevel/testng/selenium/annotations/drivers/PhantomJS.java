@@ -7,8 +7,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Using this annotation with @Test will cause the current MethodContext to
- * receive a WebDriver instance of PhantomJS.
+ * Using this annotation with {@link org.testng.annotations.Test} will cause the
+ * current {@link com.github.jsdevel.testng.selenium.MethodContext} to receive a
+ * {@link org.openqa.selenium.WebDriver} instance of
+ * {@link org.openqa.selenium.phantomjs.PhantomJSDriver}.
  * 
  * @author Joseph Spencer
  */

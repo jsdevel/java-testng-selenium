@@ -1,8 +1,9 @@
 package com.github.jsdevel.testng.selenium.exceptions;
 
 /**
- * Thrown to indicate that a Method annotated with @Test was declared in a class
- * that was missing PageFactory.
+ * Thrown to indicate that a {@link java.lang.reflect.Method} annotated with
+ * {@link org.testng.annotations.Test} was declared in a class that was missing
+ * {@link com.github.jsdevel.testng.selenium.PageFactory}.
  * 
  * @author Joe Spencer
  */

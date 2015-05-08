@@ -1,52 +1,54 @@
 package com.github.jsdevel.testng.selenium;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import org.openqa.selenium.WebDriver;
 
 /**
  * A context created for each test run.
  * 
  * @author Joe Spencer
- * @param <PF> The PageFactory configured.
+ * @param <PF> The {@link PageFactory} configured by {@link AbstractSuite}.
  */
-public class MethodContext<PF> {
-  final Method method;
-  private PF pageFactory;
-  private WebDriver webDriver;
-  private final List<String> output;
+public interface MethodContext<PF extends PageFactory> {
+  /**
+   * Returns the configured endpoint for this test run.
+   * 
+   * @see EnvironmentDefaults
+   * @return The configured endpoint.
+   */
+  String getEndpoint();
 
-  public MethodContext(Method method) {
-    this.method = method;
-    this.output = new ArrayList();
-  }
+  /**
+   * Returns the configured {@link PageFactory} for this test run.
+   * 
+   * @return The configured {@link PageFactory}.
+   */
+  PF getPageFactory();
 
-  public WebDriver getWebDriver() {
-    return this.webDriver;
-  }
+  /**
+   * Returns the configured {@link WebDriver} for this test run.
+   * @see EnvironmentDefaults
+   * @see com.github.jsdevel.testng.selenium.annotations.drivers
+   * 
+   * @return The configured driver;
+   */
+  WebDriver getWebDriver();
 
-  public PF getPageFactory() {
-    return this.pageFactory;
-  }
+  /**
+   * Returns the configured
+   * {@link com.github.jsdevel.testng.selenium.annotations.driverconfig.UserAgent}
+   * for this test run.
+   * 
+   * @see EnvironmentDefaults
+   * @see com.github.jsdevel.testng.selenium.annotations.driverconfig.UserAgent
+   * 
+   * @return The configured UserAgent String.
+   */
+  String getUserAgent();
 
-  public void log(String msg) {
-    this.output.add(msg);
-  }
-
-  // Used by AbstractSuite.
-  List<String> getOutput() {
-    return Collections.unmodifiableList(output);
-  }
-
-  // Used by AbstractSuite.
-  void setPageFactory(PF pageFactory) {
-    this.pageFactory = pageFactory; 
-  }
-
-  // Used by AbstractSuite.
-  void setWebDriver(WebDriver webDriver) {
-    this.webDriver = webDriver;
-  }
+  /**
+   * Logs a message for future processing.
+   * 
+   * @param msg The message to log.
+   */
+  void log(String msg);
 }

@@ -1,9 +1,10 @@
 package com.github.jsdevel.testng.selenium.fixtures;
 
-import com.github.jsdevel.testng.selenium.AbstractPageFactory;
+import com.github.jsdevel.testng.selenium.PageFactory;
 
-public class SamplePageFactory extends AbstractPageFactory {
-  public SampleHomePage getHomePage() {
-    return initializePage("/", new SampleHomePage());
-  }
+public interface SamplePageFactory extends PageFactory {
+  SampleHomePage getHomePage();  
+  SampleHomePage getHomePage(String path);  
+  // Used to throw an Exception in the test.
+  String getFoo();
 }
