@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * A Proxy implementation of an interface that extends PageFactory.  All methods
  of the sub interface must have a return type that directly extends
- Page.  All pages returned from this PageFactory will be initialized.
+ AbstractPage.  All pages returned from this PageFactory will be initialized.
  * 
  * @author Joe Spencer
  * @param <PF> The PageFactory this Proxy wraps.
@@ -34,13 +34,13 @@ class PageFactoryProxy<PF extends PageFactory> implements InvocationHandler {
   public Object invoke(Object proxy, Method pageFactoryMethod, Object[] args) throws Throwable {
     Object page = pageFactoryMethod.getReturnType().newInstance();
 
-    if (page instanceof Page) {
-      Page abstractPage = (Page) page;
+    if (page instanceof AbstractPage) {
+      AbstractPage abstractPage = (AbstractPage) page;
       abstractPage.initialize(getDesiredUrl(pageFactoryMethod, args), context);
     } else {
       throw new PageInstantiationException("Pages returned from " +
           pageFactoryClass.getName() + " must return instances of " +
-          Page.class.getName());
+          AbstractPage.class.getName());
     }
 
     return page;
