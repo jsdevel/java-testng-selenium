@@ -7,8 +7,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Using this annotation causes the {@link org.openqa.selenium.WebDriver}'s
- * user-agent to be set to the value given.
+ * This annotation allows individual tests to configure the user agent in the
+ * current {@link org.openqa.selenium.WebDriver}.
  * 
  * @author Joseph Spencer
  */

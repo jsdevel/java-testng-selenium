@@ -1,40 +1,59 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset=UTF8>
+    <meta charset="UTF-8">
     <title>TestNG Selenium Overview</title>
   </head>
   <body>
-    <h2>Getting Started</h2>
-    First thing you need to do is get testng-selenium on your class path.
-    <br/>
-    For maven users it's as easy as adding this to your dependencies:
-    <br/>
+    <h2>Overview</h2>
+    TestNG-Selenium takes care of all the boilerplate involved in writing
+    selenium tests.
+    <h2>Project Goals</h2>
+    <ul>
+      <li>Configuration through System properties and annotations.</li>
+      <li>Facilitate running tests in parallel.</li>
+      <li>Remove typical boilerplate, such as taking screenshots on test
+        failures, configuring WebDriver, and instantiating page objects.</li>
+      <li>Declarative way of defining page objects with PageFactory.</li>
+      <li>Declarative way of configuring tests individually.</li>
+    </ul>
+    <h2>Maven Dependency</h2>
     <script src="https://gist.github.com/jsdevel/9b3638c9a10472234e73.js"></script>
-    <br/>
-    In each of your suite classes, extend <code>AbstractSuite</code> like this:
+    <h2>Writing Suites</h2>
+    In each of your suite classes, extend <code>AbstractSuite</code> and pass
+      your PageFactory as a generic type argument.
     <br/>
     <script src="https://gist.github.com/jsdevel/a1b0bd45673077b997e4.js"></script>
     <br/>
-    <code>AbstractSuite</code> provides suites with a <code>getPageFactory</code>
-    method to create the page factories passed in as a type parameter.  In this example,
-    the page factory passed as a generic type on line 7 is returned by
-    <code>getPageFactory</code>.
-    <br/>
-    Now let's look at <code>MyPageFactory</code>:
-    <br/>
+    <code>AbstractSuite</code> provides a <code>getPageFactory</code>
+    method to create the page factories passed in as generic type arguments.  In
+    this example, the page factory passed as a generic type on line 7 is
+    returned by <code>getPageFactory</code>.
+    <h2>Writing a PageFactory</h2>
+    A PageFactory is nothing more than an interface:
     <script src="https://gist.github.com/jsdevel/ccf7b410397f3e59fddb.js"></script>
     <br/>
-    Each method declared in a <code>PageFactory</code> should return a sub class of
-    <code>Page</code>.  This allows testng-selenium to initialize your page objects,
-    by doing some cool things, like navigating to them when <code>WebDriver</code>
-    has been created.  See
-    <a href="#pageInitializationPhase">Page Initialization</a> for more details.
-    <br/>
-    Ok, back to this page factory business.  How is testng-selenium able to construct
-    a page factory from an interface?  Simple, Dynamic Proxies.
-    <br/>
-
-    <h2 id=pageInitializationPhase>Page Initialization</h2>
+    Each method declared in a <code>PageFactory</code> should return a sub class
+    of <code>Page</code>.  This allows TestNG-Selenium to do some cool things
+    when initializing your page objects, like navigating to them when
+    <code>WebDriver</code> has been created, wiring up annotated fields using
+    Selenium's PageFactory initializer, and validating that the URL currently
+    being viewed by WebDriver is valid for the requested page.  This approach
+    also allows you to avoid boilerplate by letting TestNG-Selenium manage your
+    page factory's lifecycle.
+    <h2>Writing a Page object.</h2>
+    <ol>
+      <li>Create a class I.E. GoogleHomePage</li>
+      <li>Extend com.github.jsdevel.testng.selenium.AbstractPage.</li>
+      <li>Pass your page object's type, and the page factory used to create it
+        as generic type arguments to AbstractPage.</li>
+      <li>Optionally add WebElement fields annotated with @FindBy (see
+        <a href='https://code.google.com/p/selenium/wiki/PageFactory'>Google's
+          PageFactory pattern.</a>).</li>
+    </ol>
+    <script src="https://gist.github.com/jsdevel/c9936738506d22e03722.js"></script>
+    If you need to do something before validation occurs, such as wait for
+    requests, or poll a global javascript variable, you can override
+    <code>AbstractPage#handlePageInitialized()</code>.
   </body>
 </html>
