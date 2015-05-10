@@ -21,6 +21,8 @@ public class EnvironmentConfig {
   public static final String TMPDIR = System.getProperty(
       SystemProperties.TMPDIR, EnvironmentConfigDefaults.TMPDIR);
 
+  public static final File SCREENSHOT_DIR;
+
   private static final String SCREENSIZE_OPTIONS = "LargeDesktop,Desktop,Tablet,Phone";
 
   static {
@@ -58,5 +60,7 @@ public class EnvironmentConfig {
       }
       System.out.println(SystemProperties.ENDPOINT + " set to " + ENDPOINT);
     }
+    SCREENSHOT_DIR = new File(TMPDIR, "screenshots");
+    SCREENSHOT_DIR.mkdirs();
   }
 }

@@ -3,7 +3,6 @@ package com.github.jsdevel.testng.selenium.samples;
 import com.github.jsdevel.testng.selenium.AbstractSuite;
 import com.github.jsdevel.testng.selenium.annotations.screensizes.LargeDesktop;
 import com.github.jsdevel.testng.selenium.annotations.screensizes.Phone;
-import com.github.jsdevel.testng.selenium.environment.EnvironmentConfig;
 import com.github.jsdevel.testng.selenium.exceptions.PageInitializationException;
 import com.github.jsdevel.testng.selenium.exceptions.PageInstantiationException;
 import static org.testng.AssertJUnit.assertNotNull;

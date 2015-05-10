@@ -1,7 +1,13 @@
 package com.github.jsdevel.testng.selenium;
 
 import com.github.jsdevel.testng.selenium.environment.EnvironmentConfig;
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 
@@ -46,16 +52,27 @@ public class AbstractSuite<PF extends PageFactory> {
   }
 
   @AfterMethod(alwaysRun = true)
-  public void afterMethod() {
+  public void afterMethod(ITestResult testResult) throws IOException {
     MethodContextImpl<PF> context = methodContext.get();
 
     if (context == null) {
       return; 
     }
 
-    if (context.getOutput() != null) {
-      for (String line: context.getOutput()) {
-        TestNGSeleniumLogger.log(line);
+    if (testResult.getStatus() == ITestResult.FAILURE) {
+      File screenshotTarget = new File(EnvironmentConfig.SCREENSHOT_DIR,
+          context.method.getDeclaringClass().getName() +
+          ":" + context.method.getName() + ".png");
+      context.log("Saving a screenshot to " +
+          screenshotTarget.getAbsolutePath());
+      File screenshot = ((TakesScreenshot) context.getWebDriver())
+          .getScreenshotAs(OutputType.FILE);
+      FileUtils.copyFile(screenshot, screenshotTarget);
+
+      if (context.getOutput() != null) {
+        for (String line: context.getOutput()) {
+          TestNGSeleniumLogger.log(line);
+        }
       }
     }
 
