@@ -1,5 +1,7 @@
 package com.github.jsdevel.testng.selenium;
 
+import com.github.jsdevel.testng.selenium.environment.EnvironmentConfig;
+
 /**
  * A logger that prefixes output.
  * 

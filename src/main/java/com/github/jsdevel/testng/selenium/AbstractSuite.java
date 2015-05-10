@@ -1,5 +1,6 @@
 package com.github.jsdevel.testng.selenium;
 
+import com.github.jsdevel.testng.selenium.environment.EnvironmentConfig;
 import java.lang.reflect.Method;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -38,6 +39,7 @@ public class AbstractSuite<PF extends PageFactory> {
 
     context.setEndpoint(EnvironmentConfig.ENDPOINT);
     AbsractSuiteHelpers.addWebDriver(context);
+    AbsractSuiteHelpers.addScreensize(context);
     AbsractSuiteHelpers.<PF>addPageFactory(context);
 
     methodContext.set(context);

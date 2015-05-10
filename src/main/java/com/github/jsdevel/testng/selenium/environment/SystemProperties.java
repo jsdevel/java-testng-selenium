@@ -1,4 +1,4 @@
-package com.github.jsdevel.testng.selenium;
+package com.github.jsdevel.testng.selenium.environment;
 
 /**
  * Constants representing system property names recognized by testng-selenium.
@@ -23,4 +23,9 @@ public class SystemProperties {
    * String value of "<code>testng.selenium.screensize</code>".
    */
   public static final String SCREENSIZE = "testng.selenium.screensize"; 
+
+  /**
+   * String value of "<code>testng.selenium.tmpdir</code>".
+   */
+  public static final String TMPDIR = "testng.selenium.tmpdir"; 
 }

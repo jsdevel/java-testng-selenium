@@ -25,6 +25,15 @@ public interface MethodContext<PF extends PageFactory> {
   PF getPageFactory();
 
   /**
+   * Returns the screen size that has been configured for this test run.
+   * 
+   * @see com.github.jsdevel.testng.selenium.annotations.screensizes.
+   * 
+   * @return The configured screen size.
+   */
+  Object getScreensize();
+
+  /**
    * Returns the configured {@link WebDriver} for this test run.
    * @see EnvironmentDefaults
    * @see com.github.jsdevel.testng.selenium.annotations.drivers

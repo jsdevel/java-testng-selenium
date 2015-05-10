@@ -12,6 +12,7 @@ class MethodContextImpl<PF extends PageFactory> implements MethodContext<PF> {
   private PF pageFactory;
   private WebDriver webDriver;
   private final List<String> output;
+  private Object screensize;
   private String userAgent;
   private String endpoint;
 
@@ -37,6 +38,11 @@ class MethodContextImpl<PF extends PageFactory> implements MethodContext<PF> {
   }
 
   @Override
+  public Object getScreensize() {
+    return this.screensize;
+  }
+  
+  @Override
   public WebDriver getWebDriver() {
     return this.webDriver;
   }
@@ -61,6 +67,10 @@ class MethodContextImpl<PF extends PageFactory> implements MethodContext<PF> {
   }
   void setPageFactory(PF pageFactory) {
     this.pageFactory = pageFactory; 
+  }
+
+  void setScreensize(Object screensize) {
+    this.screensize = screensize;
   }
 
   void setWebDriver(WebDriver webDriver) {

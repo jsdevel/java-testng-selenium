@@ -4,11 +4,18 @@ import com.github.jsdevel.testng.selenium.annotations.driverconfig.UserAgent;
 import com.github.jsdevel.testng.selenium.annotations.drivers.Chrome;
 import com.github.jsdevel.testng.selenium.annotations.drivers.Firefox;
 import com.github.jsdevel.testng.selenium.annotations.drivers.InternetExplorer;
+import com.github.jsdevel.testng.selenium.annotations.screensizes.Desktop;
+import com.github.jsdevel.testng.selenium.annotations.screensizes.LargeDesktop;
+import com.github.jsdevel.testng.selenium.annotations.screensizes.Phone;
+import com.github.jsdevel.testng.selenium.annotations.screensizes.Tablet;
+import com.github.jsdevel.testng.selenium.environment.EnvironmentConfig;
 import com.github.jsdevel.testng.selenium.exceptions.MissingPageFactoryException;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import net.anthavio.phanbedder.Phanbedder;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
@@ -39,6 +46,26 @@ class AbsractSuiteHelpers {
     context.setPageFactory(PageFactoryProxy.newInstance(pageFactoryClass, context));
   } 
 
+  static void addScreensize(MethodContextImpl context) {
+    Method method = context.method;
+    WebDriver driver = context.getWebDriver();
+
+    Dimension testConfiguredDimension = getDimension(method, context);
+
+    if (testConfiguredDimension == null) {
+      try {
+        testConfiguredDimension = getDimension(ScreenSizeHelper.class
+            .getDeclaredMethod(EnvironmentConfig.SCREENSIZE.toLowerCase()), context);
+      } catch (NoSuchMethodException | SecurityException e) {
+        // this should never get reached.
+      }
+    }
+
+    if (testConfiguredDimension != null) {
+      driver.manage().window().setSize(testConfiguredDimension);
+    }
+  }
+
   static synchronized void addWebDriver(MethodContextImpl context) {
     Method method = context.method;
     if (method.isAnnotationPresent(Chrome.class)) {
@@ -59,6 +86,7 @@ class AbsractSuiteHelpers {
     }
   }
 
+  // Private methods.
   private static void addChromeDriver(MethodContextImpl context) {
     ChromeDriver driver = new ChromeDriver();
     context.setWebDriver(driver);
@@ -93,7 +121,40 @@ class AbsractSuiteHelpers {
     }
 
     PhantomJSDriver driver = new PhantomJSDriver(dcaps);
-    //driver.manage().window().setSize(context.getDimension());
     context.setWebDriver(driver);
+  }
+
+  private static Dimension getDimension(Method method, MethodContextImpl context) {
+    if (method.isAnnotationPresent(Phone.class)) {
+      Phone dimension = method.getAnnotation(Phone.class);
+      context.setScreensize(dimension);
+      return new Dimension(dimension.width(), dimension.height());
+    } else if (method.isAnnotationPresent(Tablet.class)) {
+      Tablet dimension = method.getAnnotation(Tablet.class);
+      context.setScreensize(dimension);
+      return new Dimension(dimension.width(), dimension.height());
+    } else if (method.isAnnotationPresent(Desktop.class)) {
+      Desktop dimension = method.getAnnotation(Desktop.class);
+      context.setScreensize(dimension);
+      return new Dimension(dimension.width(), dimension.height());
+    } else if (method.isAnnotationPresent(LargeDesktop.class)) {
+      LargeDesktop dimension = method.getAnnotation(LargeDesktop.class);
+      context.setScreensize(dimension);
+      return new Dimension(dimension.width(), dimension.height());
+    }
+
+    return null;
+
+  }
+
+  private static class ScreenSizeHelper {
+    @Phone
+    static void phone(){}
+    @Tablet
+    static void tablet(){}
+    @Desktop
+    static void deskop(){}
+    @LargeDesktop
+    static void lagedeskop(){}
   }
 }
