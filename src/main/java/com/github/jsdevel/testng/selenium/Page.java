@@ -42,8 +42,9 @@ public interface Page<P extends Page, PF extends PageFactory> {
   Page<P, PF> getPage();
 
   /**
-   * The PageFactory instance that build this Page.
-   * @return 
+   * The PageFactory instance that built this Page.
+   * 
+   * @return  The PageFactory that built this Page.
    */
   PF getPageFactory();
 

@@ -4,7 +4,7 @@ package com.github.jsdevel.testng.selenium.environment;
  * Constants representing system property names recognized by testng-selenium.
  * 
  * @see EnvironmentConfig
- * @see EnvironmentDefaults
+ * @see EnvironmentConfigDefaults
  * 
  * @author Joe Spencer
  */
