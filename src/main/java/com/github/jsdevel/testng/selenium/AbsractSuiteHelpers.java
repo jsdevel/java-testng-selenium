@@ -26,6 +26,8 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -125,23 +127,29 @@ class AbsractSuiteHelpers {
   }
 
   private static void addFirefoxDriver(MethodContextImpl context) {
-    /*FirefoxDriver driver = new FirefoxDriver();
-    context.setWebDriver(driver);*/
+    FirefoxDriver driver = new FirefoxDriver();
+    context.setWebDriver(driver);
   }
 
   private static void addInternetExplorerDriver(MethodContextImpl context) {
-    /*InternetExplorerDriver driver = new InternetExplorerDriver();
-    context.setWebDriver(driver);*/
+    InternetExplorerDriver driver = new InternetExplorerDriver();
+    context.setWebDriver(driver);
   }
 
   private static void addPhantomJSDriver(MethodContextImpl context) {
     DesiredCapabilities dcaps = new DesiredCapabilities();
+    String testName = getTestName(context.method) + "-" +
+        System.currentTimeMillis();
     dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY,
         phantomBinary.getAbsolutePath());
     List<String> phantomCliArgs = new ArrayList();
     phantomCliArgs.add("--web-security=false");
     phantomCliArgs.add("--ignore-ssl-errors=true");
     phantomCliArgs.add("--ssl-protocol=any");
+    phantomCliArgs.add("--cookies-file=" + new File(TMPDIR, "cookies-" +
+        testName + ".txt").getAbsolutePath());
+    phantomCliArgs.add("--local-storage-path=" + new File(TMPDIR,
+        "local-storage-" + testName).getAbsolutePath());
 
     List<String> ghostdriverCliArgs = new ArrayList();
 
@@ -151,11 +159,6 @@ class AbsractSuiteHelpers {
       Logger.getLogger(PhantomJSDriverService.class.getName()).setLevel(
           Level.OFF);
     }
-
-    /*new String[] {                                                                  
-          "--cookies-file=" + TestHelper.getPhantomCookieFilePath(context),             
-          "--local-storage-path=/some/path" + TestHelper.getLocalStoragePath(context)
-        });*/                                                                          
 
     dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS,
         phantomCliArgs.toArray(new String[]{}));
