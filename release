@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 mvn release:clean release:prepare release:perform
 git push origin master
 rm -rf /tmp/apidocs
