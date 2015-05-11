@@ -1,14 +1,19 @@
-package com.github.jsdevel.testng.selenium.environment;
+package com.github.jsdevel.testng.selenium.config;
 
 /**
  * Constants representing system property names recognized by testng-selenium.
  * 
- * @see EnvironmentConfig
- * @see EnvironmentConfigDefaults
+ * @see Config
+ * @see ConfigDefaults
  * 
  * @author Joe Spencer
  */
 public class SystemProperties {
+  /**
+   * String value of "<code>testng.selenium.debug</code>".
+   */
+  public static final String DEBUG = "testng.selenium.debug"; 
+
   /**
    * String value of "<code>testng.selenium.driver</code>".
    */

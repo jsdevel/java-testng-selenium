@@ -54,7 +54,6 @@ class MethodContextImpl<PF extends PageFactory> implements MethodContext<PF> {
 
   @Override
   public void log(String msg) {
-    // System.out.println(msg);
     this.output.add(msg);
   }
 

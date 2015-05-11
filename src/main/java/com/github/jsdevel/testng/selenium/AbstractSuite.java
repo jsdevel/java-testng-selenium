@@ -1,6 +1,6 @@
 package com.github.jsdevel.testng.selenium;
 
-import com.github.jsdevel.testng.selenium.environment.EnvironmentConfig;
+import com.github.jsdevel.testng.selenium.config.Config;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import org.testng.ITestResult;
@@ -39,10 +39,12 @@ public class AbstractSuite<PF extends PageFactory> {
   public void beforeMethod(Method method) {
     MethodContextImpl<PF> context = new MethodContextImpl(method);
 
-    context.setEndpoint(EnvironmentConfig.ENDPOINT);
+    context.setEndpoint(Config.ENDPOINT);
     AbsractSuiteHelpers.addWebDriver(context);
     AbsractSuiteHelpers.addScreensize(context);
     AbsractSuiteHelpers.<PF>addPageFactory(context);
+    context.log("Starting test method " + AbsractSuiteHelpers.getTestName(
+        method));
 
     methodContext.set(context);
   }
@@ -58,11 +60,7 @@ public class AbstractSuite<PF extends PageFactory> {
     if (testResult.getStatus() == ITestResult.FAILURE) {
       AbsractSuiteHelpers.takeScreenshot(context);
 
-      if (context.getOutput() != null) {
-        for (String line: context.getOutput()) {
-          TestNGSeleniumLogger.log(line);
-        }
-      }
+      TestNGSeleniumLogger.log(context.getOutput());
     }
 
     context.getWebDriver().quit();

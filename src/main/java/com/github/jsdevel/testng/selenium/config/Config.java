@@ -1,5 +1,7 @@
-package com.github.jsdevel.testng.selenium.environment;
+package com.github.jsdevel.testng.selenium.config;
 
+import static com.github.jsdevel.testng.selenium.TestNGSeleniumLogger.debug;
+import static com.github.jsdevel.testng.selenium.TestNGSeleniumLogger.log;
 import java.io.File;
 
 /**
@@ -8,7 +10,16 @@ import java.io.File;
  * 
  * @author Joe Spencer
  */
-public class EnvironmentConfig {
+public class Config {
+  /**
+   * Enables debug mode.  Debug mode will output verbose logging.  Recognized
+   * values are "enabled", "disabled".  The default value is "disabled".
+   * 
+   * @see ConfigDefaults
+   */
+  public static final boolean DEBUG = System.getProperty(
+      SystemProperties.DEBUG, ConfigDefaults.DEBUG).equalsIgnoreCase("enabled");
+
   /**
    * The WebDriver used for the test run.  Possible values are:
    * Chrome, Firefox, InternetExplorer, and PhantomJS (the default).  This value
@@ -20,25 +31,24 @@ public class EnvironmentConfig {
    * @see com.github.jsdevel.testng.selenium.annotations.drivers.PhantomJS
    */
   public static final String DRIVER = System.getProperty(
-      SystemProperties.DRIVER, EnvironmentConfigDefaults.DRIVER);
+      SystemProperties.DRIVER, ConfigDefaults.DRIVER);
 
   /**
    * The endpoint used for the test run.  By default this is a null value, and
    * will cause a failed System.exit() call to occur if null.  This value is
-   * used to resolve desired URLs when requesting page objects from
-   * {@link PageFactory}.
+   * used to resolve desired URLs when requesting page objects from page
+   * factories.
    * 
    * @see com.github.jsdevel.testng.selenium.AbstractSuite
    */
   public static final String ENDPOINT = System.getProperty(
-      SystemProperties.ENDPOINT, EnvironmentConfigDefaults.ENDPOINT);
+      SystemProperties.ENDPOINT, ConfigDefaults.ENDPOINT);
 
   /**
-   * The prefix used when logging from {@link MethodContext}.  By default this
-   * is set to "TestNG-Selenium".
+   * The prefix used when logging.  By default this is set to "TestNG-Selenium".
    */
   public static final String LOGGING_PREFIX = System.getProperty(
-      SystemProperties.LOGGING_PREFIX, EnvironmentConfigDefaults.LOGGING_PREFIX);
+      SystemProperties.LOGGING_PREFIX, ConfigDefaults.LOGGING_PREFIX);
 
   /**
    * The default screen size used for test runs.  Possible values are:
@@ -51,7 +61,7 @@ public class EnvironmentConfig {
    * @see com.github.jsdevel.testng.selenium.annotations.screensizes.Phone
    */
   public static final String SCREENSIZE = System.getProperty(
-      SystemProperties.SCREENSIZE, EnvironmentConfigDefaults.SCREENSIZE);
+      SystemProperties.SCREENSIZE, ConfigDefaults.SCREENSIZE);
 
   /**
    * The temporary directory used to store screen shots, cookie files, and other
@@ -59,7 +69,7 @@ public class EnvironmentConfig {
    * platform specific default temp directory location.
    */
   public static final String TMPDIR = System.getProperty(
-      SystemProperties.TMPDIR, EnvironmentConfigDefaults.TMPDIR);
+      SystemProperties.TMPDIR, ConfigDefaults.TMPDIR);
 
   private static final String DRIVER_OPTIONS = "Chrome,Firefox,InternetExplorer,PhantomJS";
   private static final String SCREENSIZE_OPTIONS = "LargeDesktop,Desktop,Tablet,Phone";
@@ -67,44 +77,45 @@ public class EnvironmentConfig {
   static {
     if (!("," + DRIVER_OPTIONS + ",").toLowerCase()
             .contains(DRIVER.toLowerCase())) {
-      System.out.println(SystemProperties.DRIVER + " must be one of " +
+      log(SystemProperties.DRIVER + " must be one of " +
           DRIVER_OPTIONS);
       System.exit(1); 
     }
 
     if (ENDPOINT == null) {
-      System.out.println(SystemProperties.ENDPOINT +
+      log(SystemProperties.ENDPOINT +
           " must be a configured System property!"); 
       System.exit(1);
-    } else {
-      System.out.println(SystemProperties.ENDPOINT + " set to " + ENDPOINT);
     }
 
-    System.out.println(SystemProperties.LOGGING_PREFIX + " was set to " + LOGGING_PREFIX);
-
     if (!("," + SCREENSIZE_OPTIONS + ",").contains("," + SCREENSIZE + ",")) {
-      System.out.println(SystemProperties.SCREENSIZE + " must be one of " +
+      log(SystemProperties.SCREENSIZE + " must be one of " +
           SCREENSIZE_OPTIONS);
-      System.out.println("Saw " + SCREENSIZE);
+      log("Saw " + SCREENSIZE);
       System.exit(1);
     }
 
     if (TMPDIR == null) {
-      System.out.println(SystemProperties.TMPDIR +
+      log(SystemProperties.TMPDIR +
           " must be a configured System property!"); 
       System.exit(1);
     } else {
       File tmpdir = new File(TMPDIR);
       if (tmpdir.exists()) {
         if (!tmpdir.isDirectory()) {
-          System.out.println(SystemProperties.TMPDIR +
+          log(SystemProperties.TMPDIR +
               " cannot use non directories for tmp dir."); 
           System.exit(1);
         }
       } else {
         tmpdir.mkdirs();
       }
-      System.out.println(SystemProperties.TMPDIR + " set to " + TMPDIR);
     }
+
+    debug(SystemProperties.DEBUG + " set to " + DEBUG);
+    debug(SystemProperties.DRIVER + " set to " + DRIVER);
+    debug(SystemProperties.ENDPOINT + " set to " + ENDPOINT);
+    debug(SystemProperties.SCREENSIZE + " set to " + SCREENSIZE);
+    debug(SystemProperties.TMPDIR + " set to " + TMPDIR);
   }
 }

@@ -8,13 +8,17 @@ import com.github.jsdevel.testng.selenium.annotations.screensizes.Desktop;
 import com.github.jsdevel.testng.selenium.annotations.screensizes.LargeDesktop;
 import com.github.jsdevel.testng.selenium.annotations.screensizes.Phone;
 import com.github.jsdevel.testng.selenium.annotations.screensizes.Tablet;
-import com.github.jsdevel.testng.selenium.environment.EnvironmentConfig;
-import static com.github.jsdevel.testng.selenium.environment.EnvironmentConfig.TMPDIR;
+import com.github.jsdevel.testng.selenium.config.Config;
+import static com.github.jsdevel.testng.selenium.config.Config.TMPDIR;
 import com.github.jsdevel.testng.selenium.exceptions.MissingPageFactoryException;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.anthavio.phanbedder.Phanbedder;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.Dimension;
@@ -66,7 +70,7 @@ class AbsractSuiteHelpers {
     if (testConfiguredDimension == null) {
       try {
         testConfiguredDimension = getDimension(ScreenSizeHelper.class
-            .getDeclaredMethod(EnvironmentConfig.SCREENSIZE.toLowerCase()), context);
+            .getDeclaredMethod(Config.SCREENSIZE.toLowerCase()), context);
       } catch (NoSuchMethodException | SecurityException e) {
         // this should never get reached.
       }
@@ -77,16 +81,16 @@ class AbsractSuiteHelpers {
     }
   }
 
-  static synchronized void addWebDriver(MethodContextImpl context) {
+  static void addWebDriver(MethodContextImpl context) {
     Method method = context.method;
     if (method.isAnnotationPresent(Chrome.class) ||
-        EnvironmentConfig.DRIVER.equalsIgnoreCase("chrome")) {
+        Config.DRIVER.equalsIgnoreCase("chrome")) {
       addChromeDriver(context);
     } else if (method.isAnnotationPresent(Firefox.class) ||
-               EnvironmentConfig.DRIVER.equalsIgnoreCase("firefox")) {
+               Config.DRIVER.equalsIgnoreCase("firefox")) {
       addFirefoxDriver(context);
     } else if (method.isAnnotationPresent(InternetExplorer.class) ||
-               EnvironmentConfig.DRIVER.equalsIgnoreCase("internetexplorer")) {
+               Config.DRIVER.equalsIgnoreCase("internetexplorer")) {
       addInternetExplorerDriver(context);
     } else {
       addPhantomJSDriver(context);
@@ -100,10 +104,13 @@ class AbsractSuiteHelpers {
     }
   }
 
+  static String getTestName(Method method) {
+    return method.getDeclaringClass().getName() + ":" + method.getName();
+  }
+
   static void takeScreenshot(MethodContextImpl context) throws IOException {
-      File screenshotTarget = new File(SCREENSHOT_DIR,
-          context.method.getDeclaringClass().getName() +
-          ":" + context.method.getName() + ".png");
+      File screenshotTarget = new File(SCREENSHOT_DIR, getTestName(
+          context.method) + ".png");
       context.log("Saving a screenshot to " +
           screenshotTarget.getAbsolutePath());
       File screenshot = ((TakesScreenshot) context.getWebDriver())
@@ -131,15 +138,30 @@ class AbsractSuiteHelpers {
     DesiredCapabilities dcaps = new DesiredCapabilities();
     dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY,
         phantomBinary.getAbsolutePath());
-    /*
-    dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS,                      
-        new String[] {                                                                  
+    List<String> phantomCliArgs = new ArrayList();
+    phantomCliArgs.add("--web-security=false");
+    phantomCliArgs.add("--ignore-ssl-errors=true");
+    phantomCliArgs.add("--ssl-protocol=any");
+
+    List<String> ghostdriverCliArgs = new ArrayList();
+
+    if (!Config.DEBUG) {
+      phantomCliArgs.add("--webdriver-loglevel=ERROR");
+      ghostdriverCliArgs.add("--logLevel=ERROR");
+      Logger.getLogger(PhantomJSDriverService.class.getName()).setLevel(
+          Level.OFF);
+    }
+
+    /*new String[] {                                                                  
           "--cookies-file=" + TestHelper.getPhantomCookieFilePath(context),             
-          "--web-security=false",                                                       
-          "--ignore-ssl-errors=true",                                                   
-          "--ssl-protocol=any",                                                         
           "--local-storage-path=/some/path" + TestHelper.getLocalStoragePath(context)
         });*/                                                                          
+
+    dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_CLI_ARGS,
+        phantomCliArgs.toArray(new String[]{}));
+
+    dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_GHOSTDRIVER_CLI_ARGS,
+        ghostdriverCliArgs.toArray(new String[]{}));
 
     if (context.getUserAgent() != null) {
       dcaps.setCapability("phantomjs.page.settings.userAgent", context.getUserAgent()); 

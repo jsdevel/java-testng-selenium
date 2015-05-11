@@ -1,13 +1,18 @@
-package com.github.jsdevel.testng.selenium.environment;
+package com.github.jsdevel.testng.selenium.config;
 
 /**
  * Constants representing default values for EnvironmentConfig.
  * 
- * @see EnvironmentConfig
+ * @see Config
  * 
  * @author Joe Spencer
  */
-public class EnvironmentConfigDefaults {
+public class ConfigDefaults {
+  /**
+   * String value of "<code>false</code>".
+   */
+  public static final String DEBUG = "disabled";
+
   /**
    * String value of "<code>PhantomJS</code>".
    */
