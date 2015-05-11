@@ -10,6 +10,11 @@ package com.github.jsdevel.testng.selenium.environment;
  */
 public class SystemProperties {
   /**
+   * String value of "<code>testng.selenium.driver</code>".
+   */
+  public static final String DRIVER = "testng.selenium.driver"; 
+
+  /**
    * String value of "<code>testng.selenium.endpoint</code>".
    */
   public static final String ENDPOINT = "testng.selenium.endpoint"; 

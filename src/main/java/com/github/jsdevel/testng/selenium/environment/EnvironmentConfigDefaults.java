@@ -9,6 +9,11 @@ package com.github.jsdevel.testng.selenium.environment;
  */
 public class EnvironmentConfigDefaults {
   /**
+   * String value of "<code>PhantomJS</code>".
+   */
+  public static final String DRIVER = "PhantomJS";
+
+  /**
    * No default endpoint is provided.
    */
   public static final String ENDPOINT = null;

@@ -9,12 +9,17 @@ import com.github.jsdevel.testng.selenium.annotations.screensizes.LargeDesktop;
 import com.github.jsdevel.testng.selenium.annotations.screensizes.Phone;
 import com.github.jsdevel.testng.selenium.annotations.screensizes.Tablet;
 import com.github.jsdevel.testng.selenium.environment.EnvironmentConfig;
+import static com.github.jsdevel.testng.selenium.environment.EnvironmentConfig.TMPDIR;
 import com.github.jsdevel.testng.selenium.exceptions.MissingPageFactoryException;
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import net.anthavio.phanbedder.Phanbedder;
+import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.Dimension;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
@@ -28,6 +33,12 @@ import org.openqa.selenium.remote.DesiredCapabilities;
  */
 class AbsractSuiteHelpers {
   private static final File phantomBinary = Phanbedder.unpack();
+  static final File SCREENSHOT_DIR;
+
+  static {
+    SCREENSHOT_DIR = new File(TMPDIR, "screenshots");
+    SCREENSHOT_DIR.mkdirs();
+  }
 
   static <PF extends PageFactory> void addPageFactory(MethodContextImpl context) {
     Class<?> suite = context.method.getDeclaringClass();
@@ -68,11 +79,14 @@ class AbsractSuiteHelpers {
 
   static synchronized void addWebDriver(MethodContextImpl context) {
     Method method = context.method;
-    if (method.isAnnotationPresent(Chrome.class)) {
+    if (method.isAnnotationPresent(Chrome.class) ||
+        EnvironmentConfig.DRIVER.equalsIgnoreCase("chrome")) {
       addChromeDriver(context);
-    } else if (method.isAnnotationPresent(Firefox.class)) {
+    } else if (method.isAnnotationPresent(Firefox.class) ||
+               EnvironmentConfig.DRIVER.equalsIgnoreCase("firefox")) {
       addFirefoxDriver(context);
-    } else if (method.isAnnotationPresent(InternetExplorer.class)) {
+    } else if (method.isAnnotationPresent(InternetExplorer.class) ||
+               EnvironmentConfig.DRIVER.equalsIgnoreCase("internetexplorer")) {
       addInternetExplorerDriver(context);
     } else {
       addPhantomJSDriver(context);
@@ -84,6 +98,17 @@ class AbsractSuiteHelpers {
     if (method.isAnnotationPresent(UserAgent.class)) {
       context.setUserAgent(method.getAnnotation(UserAgent.class).value()); 
     }
+  }
+
+  static void takeScreenshot(MethodContextImpl context) throws IOException {
+      File screenshotTarget = new File(SCREENSHOT_DIR,
+          context.method.getDeclaringClass().getName() +
+          ":" + context.method.getName() + ".png");
+      context.log("Saving a screenshot to " +
+          screenshotTarget.getAbsolutePath());
+      File screenshot = ((TakesScreenshot) context.getWebDriver())
+          .getScreenshotAs(OutputType.FILE);
+      FileUtils.copyFile(screenshot, screenshotTarget);
   }
 
   // Private methods.
@@ -144,7 +169,6 @@ class AbsractSuiteHelpers {
     }
 
     return null;
-
   }
 
   private static class ScreenSizeHelper {
