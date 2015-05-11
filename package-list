@@ -2,5 +2,5 @@ com.github.jsdevel.testng.selenium
 com.github.jsdevel.testng.selenium.annotations.driverconfig
 com.github.jsdevel.testng.selenium.annotations.drivers
 com.github.jsdevel.testng.selenium.annotations.screensizes
-com.github.jsdevel.testng.selenium.environment
+com.github.jsdevel.testng.selenium.config
 com.github.jsdevel.testng.selenium.exceptions
