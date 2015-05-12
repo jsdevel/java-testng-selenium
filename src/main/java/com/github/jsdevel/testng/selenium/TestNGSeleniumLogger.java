@@ -16,7 +16,7 @@ public class TestNGSeleniumLogger {
    * 
    * @see com.github.jsdevel.testng.selenium.config.Config
    * 
-   * @param msg 
+   * @param msg The message to log.
    */
   public static void debug(String msg) {
     if (Config.DEBUG) {
@@ -39,7 +39,7 @@ public class TestNGSeleniumLogger {
    * Logs a group of messages in a single buffered operation.  Using this method
    * will not interleave output with other tests when running in parallel.
    * 
-   * @param messages 
+   * @param messages The messages to log.
    */
   public static void log(List<String> messages) {
     if (messages != null) {
