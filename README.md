@@ -63,6 +63,7 @@ page factory's lifecycle.
       PageFactory pattern.</a>).</li>
 </ol>
 <img src="https://jsdevel.github.io/java-testng-selenium/images/page-object.jpg">
+<br>
 If you need to do something before validation occurs, such as wait for
 requests, or poll a global javascript variable, you can override
 <code>AbstractPage#handlePageInitialized()</code>.
