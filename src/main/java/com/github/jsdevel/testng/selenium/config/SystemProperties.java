@@ -38,4 +38,10 @@ public class SystemProperties {
    * String value of "<code>testng.selenium.tmpdir</code>".
    */
   public static final String TMPDIR = "testng.selenium.tmpdir"; 
+
+  /**
+   * String value of "<code>testng.selenium.driverconfig.useragent</code>".
+   */
+  public static final String USER_AGENT = "testng.selenium.driverconfig.useragent"; 
+
 }

@@ -70,6 +70,17 @@ public class Config {
    */
   public static final String TMPDIR = System.getProperty(
       SystemProperties.TMPDIR, ConfigDefaults.TMPDIR);
+ 
+
+  /**
+   * The default User-Agent string to use in the WebDriver.  This overrides the
+   * WebDriver's default User-Agent.  This value may be overridden on a test by
+   * test basis via annotations.
+   * 
+   * @see com.github.jsdevel.testng.selenium.annotations.driverconfig.UserAgent
+   */
+  public static final String USER_AGENT = System.getProperty(
+      SystemProperties.USER_AGENT, ConfigDefaults.USER_AGENT);
 
   private static final String DRIVER_OPTIONS = "Chrome,Firefox,InternetExplorer,PhantomJS";
   private static final String SCREENSIZE_OPTIONS = "LargeDesktop,Desktop,Tablet,Phone";
@@ -117,5 +128,6 @@ public class Config {
     debug(SystemProperties.ENDPOINT + " set to " + ENDPOINT);
     debug(SystemProperties.SCREENSIZE + " set to " + SCREENSIZE);
     debug(SystemProperties.TMPDIR + " set to " + TMPDIR);
+    debug(SystemProperties.USER_AGENT + " set to " + USER_AGENT);
   }
 }

@@ -40,6 +40,7 @@ public class AbstractSuite<PF extends PageFactory> {
     MethodContextImpl<PF> context = new MethodContextImpl(method);
 
     context.setEndpoint(Config.ENDPOINT);
+    AbsractSuiteHelpers.addUserAgent(context);
     AbsractSuiteHelpers.addWebDriver(context);
     AbsractSuiteHelpers.addScreensize(context);
     AbsractSuiteHelpers.<PF>addPageFactory(context);

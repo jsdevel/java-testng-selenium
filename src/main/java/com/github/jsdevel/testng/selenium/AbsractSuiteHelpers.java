@@ -83,6 +83,15 @@ class AbsractSuiteHelpers {
     }
   }
 
+  static void addUserAgent(MethodContextImpl context) {
+    Method method = context.method;
+    if (method.isAnnotationPresent(UserAgent.class)) {
+      context.setUserAgent(method.getAnnotation(UserAgent.class).value()); 
+    } else if (Config.USER_AGENT != null) {
+      context.setUserAgent(Config.USER_AGENT); 
+    }
+  }
+
   static void addWebDriver(MethodContextImpl context) {
     Method method = context.method;
     if (method.isAnnotationPresent(Chrome.class) ||
@@ -96,13 +105,6 @@ class AbsractSuiteHelpers {
       addInternetExplorerDriver(context);
     } else {
       addPhantomJSDriver(context);
-    }
-  }
-
-  static void addUserAgent(MethodContextImpl context) {
-    Method method = context.method;
-    if (method.isAnnotationPresent(UserAgent.class)) {
-      context.setUserAgent(method.getAnnotation(UserAgent.class).value()); 
     }
   }
 

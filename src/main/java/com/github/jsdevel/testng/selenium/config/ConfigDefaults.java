@@ -37,4 +37,9 @@ public class ConfigDefaults {
    * Value of <code>System.getProperty("java.io.tmpdir")</code>.
    */
   public static final String TMPDIR = System.getProperty("java.io.tmpdir");
+
+  /**
+   * No default user agent is provided.
+   */
+  public static final String USER_AGENT = null;
 }

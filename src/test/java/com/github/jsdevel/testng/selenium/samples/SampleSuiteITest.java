@@ -1,6 +1,7 @@
 package com.github.jsdevel.testng.selenium.samples;
 
 import com.github.jsdevel.testng.selenium.AbstractSuite;
+import com.github.jsdevel.testng.selenium.annotations.driverconfig.UserAgent;
 import com.github.jsdevel.testng.selenium.annotations.screensizes.LargeDesktop;
 import com.github.jsdevel.testng.selenium.annotations.screensizes.Phone;
 import com.github.jsdevel.testng.selenium.exceptions.PageInitializationException;
@@ -51,5 +52,10 @@ public class SampleSuiteITest extends AbstractSuite<SamplePageFactory> {
     Phone screensize = (Phone) getPageFactory().getHomePage()
         .getContext().getScreensize();
     assertNotNull(screensize);
+  }
+
+  @Test @UserAgent("foo")
+  public void we_should_be_able_to_set_the_user_agent_on_a_test_by_test_basis() {
+    getPageFactory();
   }
 }
