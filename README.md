@@ -26,13 +26,13 @@ testng-selenium
   <li>Declarative way of configuring tests individually.</li>
 </ul>
 <h2 id="mavenDependencySection">Maven Dependency</h2>
-<script src="https://gist.github.com/jsdevel/9b3638c9a10472234e73.js"></script>
+<img src="https://jsdevel.github.io/java-testng-selenium/images/maven-dependency.png">
 <h2 id="writingSuitesSection">Writing Suites</h2>
 In each of your suite classes, extend <code>AbstractSuite</code> and pass
   your PageFactory as a generic type argument.
 <br/>
 <br/>
-<script src="https://gist.github.com/jsdevel/a1b0bd45673077b997e4.js"></script>
+<img src="https://jsdevel.github.io/java-testng-selenium/images/suite.png">
 <br/>
 <code>AbstractSuite</code> provides a <code>getPageFactory</code>
 method to create the page factories passed in as generic type arguments.  In
@@ -42,7 +42,7 @@ returned by <code>getPageFactory</code>.
 A PageFactory is nothing more than an interface:
 <br/>
 <br/>
-<script src="https://gist.github.com/jsdevel/ccf7b410397f3e59fddb.js"></script>
+<img src="https://jsdevel.github.io/java-testng-selenium/images/page-factory.png">
 <br/>
 Each method declared in a <code>PageFactory</code> should return a sub class
 of <code>AbstractPage</code>.  This allows TestNG-Selenium to do some cool things
@@ -62,7 +62,7 @@ page factory's lifecycle.
     <a href='https://code.google.com/p/selenium/wiki/PageFactory'>Google's
       PageFactory pattern.</a>).</li>
 </ol>
-<script src="https://gist.github.com/jsdevel/c9936738506d22e03722.js"></script>
+<img src="https://jsdevel.github.io/java-testng-selenium/images/page-object.png">
 If you need to do something before validation occurs, such as wait for
 requests, or poll a global javascript variable, you can override
 <code>AbstractPage#handlePageInitialized()</code>.
@@ -78,11 +78,11 @@ configuration on a per test basis.
 Here is a list of the system properties recognized by TestNG-Selenium with their default values:
 <br/>
 <br/>
-<script src="https://gist.github.com/jsdevel/481a97b58d534e325824.js"></script> 
+<img src="https://jsdevel.github.io/java-testng-selenium/images/system-based-configuration.png"> 
 <h3 id="annotationBasedConfigurationSection">Annotation Based Configuration</h3>
 Here is an example of how we can override a system property using an annotation
 for a single test run.  For the full list of supported annotations, see
 package contents under com.github.jsdevel.annotations.
 <br/>
 <br/>
-<script src="https://gist.github.com/jsdevel/95035a9b12925e6711ae.js"></script> 
+<img src="https://jsdevel.github.io/java-testng-selenium/images/annotation-based-configuration.png"> 
