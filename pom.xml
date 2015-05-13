@@ -92,12 +92,12 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <version>2.18.1</version>
         <configuration>
-          <systemProperties>
-            <testng.selenium.endpoint>${testng.selenium.endpoint}</testng.selenium.endpoint>
-          </systemProperties>
           <suiteXmlFiles>
             <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
           </suiteXmlFiles>
+          <systemProperties>
+            <testng.selenium.endpoint>${testng.selenium.endpoint}</testng.selenium.endpoint>
+          </systemProperties>
         </configuration>
       </plugin>
 

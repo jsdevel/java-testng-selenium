@@ -1,14 +1,14 @@
 package com.github.jsdevel.testng.selenium.config;
 
 /**
- * Constants representing system property names recognized by testng-selenium.
+ * Configuration options representing system and property file key names
+ * recognized by testng-selenium.
  * 
  * @see Config
- * @see ConfigDefaults
  * 
  * @author Joe Spencer
  */
-public class SystemProperties {
+public class ConfigOptions {
   /**
    * String value of "<code>testng.selenium.debug</code>".
    */
@@ -27,7 +27,7 @@ public class SystemProperties {
   /**
    * String value of "<code>testng.selenium.logging_prefix</code>".
    */
-  public static final String LOGGING_PREFIX = "testng.selenium.logging.prefix"; 
+  public static final String LOGGING_PREFIX = "testng.selenium.logging_prefix"; 
 
   /**
    * String value of "<code>testng.selenium.screensize</code>".

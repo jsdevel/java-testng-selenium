@@ -1,45 +1,46 @@
 package com.github.jsdevel.testng.selenium.config;
 
 /**
- * Constants representing default values for EnvironmentConfig.
- * 
+ * Constants representing default configuration values.
+ *
  * @see Config
- * 
+ *
  * @author Joe Spencer
  */
-public class ConfigDefaults {
+class ConfigDefaults {
+
   /**
    * String value of "<code>false</code>".
    */
-  public static final String DEBUG = "disabled";
+  static final String DEBUG = "disabled";
 
   /**
    * String value of "<code>PhantomJS</code>".
    */
-  public static final String DRIVER = "PhantomJS";
+  static final String DRIVER = "PhantomJS";
 
   /**
    * No default endpoint is provided.
    */
-  public static final String ENDPOINT = null;
+  static final String ENDPOINT = null;
 
   /**
    * String value of "<code>TestNG-Selenium</code>".
    */
-  public static final String LOGGING_PREFIX = "TestNG-Selenium";
+  static final String LOGGING_PREFIX = "TestNG-Selenium";
 
   /**
    * String value of "<code>Phone</code>".
    */
-  public static final String SCREENSIZE = "Phone";
+  static final String SCREENSIZE = "Phone";
 
   /**
    * Value of <code>System.getProperty("java.io.tmpdir")</code>.
    */
-  public static final String TMPDIR = System.getProperty("java.io.tmpdir");
+  static final String TMPDIR = System.getProperty("java.io.tmpdir");
 
   /**
    * No default user agent is provided.
    */
-  public static final String USER_AGENT = null;
+  static final String USER_AGENT = null;
 }

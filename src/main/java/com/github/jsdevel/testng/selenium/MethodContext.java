@@ -12,7 +12,7 @@ public interface MethodContext<PF extends PageFactory> {
   /**
    * Returns the configured endpoint for this test run.
    * 
-   * @see com.github.jsdevel.testng.selenium.config.ConfigDefaults
+   * @see com.github.jsdevel.testng.selenium.config.Config#ENDPOINT
    * @return The configured endpoint.
    */
   String getEndpoint();
@@ -33,7 +33,7 @@ public interface MethodContext<PF extends PageFactory> {
 
   /**
    * Returns the configured {@link WebDriver} for this test run.
-   * @see com.github.jsdevel.testng.selenium.config.ConfigDefaults
+   * @see com.github.jsdevel.testng.selenium.config.Config#DRIVER
    * @see com.github.jsdevel.testng.selenium.annotations.drivers
    * 
    * @return The configured driver;
@@ -45,7 +45,7 @@ public interface MethodContext<PF extends PageFactory> {
    * {@link com.github.jsdevel.testng.selenium.annotations.driverconfig.UserAgent}
    * for this test run.
    * 
-   * @see com.github.jsdevel.testng.selenium.config.ConfigDefaults
+   * @see com.github.jsdevel.testng.selenium.config.Config#USER_AGENT
    * @see com.github.jsdevel.testng.selenium.annotations.driverconfig.UserAgent
    * 
    * @return The configured UserAgent String.

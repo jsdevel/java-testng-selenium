@@ -4,8 +4,10 @@ import com.github.jsdevel.testng.selenium.AbstractSuite;
 import com.github.jsdevel.testng.selenium.annotations.driverconfig.UserAgent;
 import com.github.jsdevel.testng.selenium.annotations.screensizes.LargeDesktop;
 import com.github.jsdevel.testng.selenium.annotations.screensizes.Phone;
+import com.github.jsdevel.testng.selenium.config.Config;
 import com.github.jsdevel.testng.selenium.exceptions.PageInitializationException;
 import com.github.jsdevel.testng.selenium.exceptions.PageInstantiationException;
+import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertNotNull;
 import org.testng.annotations.Test;
 
@@ -57,5 +59,10 @@ public class SampleSuiteITest extends AbstractSuite<SamplePageFactory> {
   @Test @UserAgent("foo")
   public void we_should_be_able_to_set_the_user_agent_on_a_test_by_test_basis() {
     getPageFactory();
+  }
+
+  @Test
+  public void we_should_be_able_to_configure_values_from_properties_files() {
+    assertEquals("testing TestNG-Selenium", Config.LOGGING_PREFIX);
   }
 }

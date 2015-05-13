@@ -12,13 +12,14 @@ testng-selenium
   <li><a href="#writingAPageObjectSection">Writing a Page Object</a></li>
   <li><a href="#configuringSection">Configuring</a>
     <ul>
+      <li><a href="#propertyFileBasedConfigurationSection">Property File Based Configuration</a></li>
       <li><a href="#systemBasedConfigurationSection">System Based Configuration</a></li>
       <li><a href="#annotationBasedConfigurationSection">Annotation Based Configuration</a></li>
     </ul></li>
 </ol>
 <h2 id="projectGoalsSection">Project Goals</h2>
 <ul>
-  <li>Configuration through System properties and annotations.</li>
+  <li>Configuration through Property Files, System properties and annotations.</li>
   <li>Facilitate running tests in parallel.</li>
   <li>Remove typical boilerplate, such as taking screenshots on test
     failures, configuring WebDriver, and instantiating page objects.</li>
@@ -68,19 +69,32 @@ If you need to do something before validation occurs, such as wait for
 requests, or poll a global javascript variable, you can override
 <code>AbstractPage#handlePageInitialized()</code>.
 <h2 id="configuringSection">Configuring</h2>
-TestNG-Selenium may be configured in one of 2 ways:
+TestNG-Selenium may be configured in one of 3 ways:
 <ul>
+  <li>Properties File</li>
   <li>System Properties</li>
   <li>Annotations</li>
 </ul>
 In general, annotation based configuration overrides system based
 configuration on a per test basis.
+<h3 id="propertyFileBasedConfigurationSection">Property File Based Configuration</h3>
+TestNG-Selenium will look for a file called "testng-selenium.properties" at
+the root of your classpath.  If found, then values contained therein will
+override the default configuration values.  The key value pairs are the same
+as they are for <a href="#systemBasedConfigurationSection">System Based Configuration</a>.
 <h3 id="systemBasedConfigurationSection">System Based Configuration</h3>
+System based configuration is driven by System properties.  System properties
+override both properties file and default configuration.
+<br/>
 Here is a list of the system properties recognized by TestNG-Selenium with their default values:
 <br/>
 <br/>
 <img src="https://jsdevel.github.io/java-testng-selenium/images/system-based-configuration.jpg"> 
 <h3 id="annotationBasedConfigurationSection">Annotation Based Configuration</h3>
+Annotation based configuration can override the default configuration,
+properties file annotation, and system based configuration for a single test
+run.
+<br />
 Here is an example of how we can override a system property using an annotation
 for a single test run.  For the full list of supported annotations, see
 package contents under com.github.jsdevel.annotations.
