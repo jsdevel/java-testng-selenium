@@ -16,7 +16,7 @@ public class GoogleHomePage extends AbstractPage<GoogleHomePage, SamplePageFacto
   }
 
   @Override
-  public boolean isPageViewableFrom(URL proposedUrl) {
+  protected boolean isPageViewableFrom(URL proposedUrl) {
     return proposedUrl.getPath().startsWith("/");
   }
 }

@@ -55,13 +55,4 @@ public interface Page<P extends Page, PF extends PageFactory> {
    * @return The {@link org.openqa.selenium.WebDriver}.
    */
   WebDriver getWebDriver(); 
-
-  /**
-   * Allows the page to signal whether or not it can be viewed from the provided
-   * URL.
-   * 
-   * @param proposedUrl The proposed URL.
-   * @return this Page.
-   */
-  boolean isPageViewableFrom(URL proposedUrl);
 }

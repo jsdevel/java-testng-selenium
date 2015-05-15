@@ -55,6 +55,18 @@ public abstract class AbstractPage<P extends AbstractPage,
   }
 
   /**
+   * Allows the page to signal whether or not it can be viewed from the provided
+   * URL.  This method is called during the initialization phase.  Override as
+   * needed for page specific validation.
+   * 
+   * @param proposedUrl The proposed URL.
+   * @return whether or not this page can be viewed by the proposedUrl.
+   */
+  protected boolean isPageViewableFrom(URL proposedUrl) {
+    return true;
+  }
+
+  /**
    * Called when this page is initialized.  An initialized page may not be fully
    * loaded in the {@link org.openqa.selenium.WebDriver}.  You may override this
    * method to perform actions like waiting for requests to finish, or elements
