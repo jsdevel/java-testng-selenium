@@ -24,7 +24,7 @@ class MethodContextImpl<PF extends PageFactory> implements MethodContext<PF> {
    */
   public MethodContextImpl(Method method) {
     this.method = method;
-    this.output = new ArrayList();
+    this.output = new ArrayList<>();
   }
 
   @Override

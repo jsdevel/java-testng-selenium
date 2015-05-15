@@ -21,7 +21,7 @@ import org.testng.annotations.BeforeMethod;
  * {@link com.github.jsdevel.testng.selenium.Page}s during tests.
  */
 public class AbstractSuite<PF extends PageFactory> {
-  private final ThreadLocal<MethodContextImpl<PF>> methodContext = new ThreadLocal();
+  private final ThreadLocal<MethodContextImpl<PF>> methodContext = new ThreadLocal<>();
 
   /**
    * Returns an implementation of the
@@ -37,7 +37,7 @@ public class AbstractSuite<PF extends PageFactory> {
 
   @BeforeMethod(alwaysRun = true)
   public void beforeMethod(Method method) {
-    MethodContextImpl<PF> context = new MethodContextImpl(method);
+    MethodContextImpl<PF> context = new MethodContextImpl<>(method);
 
     context.setEndpoint(Config.ENDPOINT);
     AbsractSuiteHelpers.addUserAgent(context);

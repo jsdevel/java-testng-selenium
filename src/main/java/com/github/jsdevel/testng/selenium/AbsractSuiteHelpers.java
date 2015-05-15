@@ -46,6 +46,7 @@ class AbsractSuiteHelpers {
     SCREENSHOT_DIR.mkdirs();
   }
 
+  @SuppressWarnings("unchecked")
   static <PF extends PageFactory> void addPageFactory(MethodContextImpl context) {
     Class<?> suite = context.method.getDeclaringClass();
     ParameterizedType abstractSuite;
@@ -144,7 +145,7 @@ class AbsractSuiteHelpers {
         System.currentTimeMillis();
     dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY,
         phantomBinary.getAbsolutePath());
-    List<String> phantomCliArgs = new ArrayList();
+    List<String> phantomCliArgs = new ArrayList<>();
     phantomCliArgs.add("--web-security=false");
     phantomCliArgs.add("--ignore-ssl-errors=true");
     phantomCliArgs.add("--ssl-protocol=any");
@@ -153,7 +154,7 @@ class AbsractSuiteHelpers {
     phantomCliArgs.add("--local-storage-path=" + new File(TMPDIR,
         "local-storage-" + testName).getAbsolutePath());
 
-    List<String> ghostdriverCliArgs = new ArrayList();
+    List<String> ghostdriverCliArgs = new ArrayList<>();
 
     if (!Config.DEBUG) {
       phantomCliArgs.add("--webdriver-loglevel=ERROR");
