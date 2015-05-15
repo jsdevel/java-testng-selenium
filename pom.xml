@@ -5,7 +5,7 @@
   <description>A library for easy TestNG Selenium testing.</description>
   <groupId>com.github.jsdevel</groupId>
   <artifactId>testng-selenium</artifactId>
-  <version>0.11.0</version>
+  <version>0.11.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <url>https://github.com/jsdevel/java-testng-selenium</url>
 
@@ -27,7 +27,7 @@
     <connection>scm:git:git@github.com:jsdevel/java-testng-selenium.git</connection>
     <developerConnection>scm:git:git@github.com:jsdevel/java-testng-selenium.git</developerConnection>
     <url>git@github.com:jsdevel/java-testng-selenium.git</url>
-    <tag>testng-selenium-0.11.0</tag>
+    <tag>testng-selenium-0.5.0</tag>
   </scm>
 
   <properties>
