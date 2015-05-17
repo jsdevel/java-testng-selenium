@@ -155,6 +155,8 @@ class AbsractSuiteHelpers {
         "local-storage-" + testName).getAbsolutePath());
 
     List<String> ghostdriverCliArgs = new ArrayList<>();
+    ghostdriverCliArgs.add("--logFile=" + new File(TMPDIR, "ghostdriver-" +
+        testName + ".log").getAbsolutePath());
 
     if (!Config.DEBUG) {
       phantomCliArgs.add("--webdriver-loglevel=ERROR");
