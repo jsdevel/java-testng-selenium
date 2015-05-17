@@ -27,7 +27,18 @@ testng-selenium
   <li>Declarative way of configuring tests individually.</li>
 </ul>
 <h2 id="mavenDependencySection">Maven Dependency</h2>
+You can add <code>TestNG-Selenium</code> to your existing project as follows:
+<br/>
+<br/>
 <img src="https://jsdevel.github.io/java-testng-selenium/images/maven-dependency.jpg">
+<br/>
+For new projects, you can quickly get setup by using the following command at a terminal:
+<br/>
+```shell
+mvn archetype:generate \
+  -DarchetypeGroupId=com.github.jsdevel \
+  -DarchetypeArtifactId=testng-selenium-archetype
+```
 <h2 id="writingSuitesSection">Writing Suites</h2>
 In each of your suite classes, extend <code>AbstractSuite</code> and pass
   your PageFactory as a generic type argument.
