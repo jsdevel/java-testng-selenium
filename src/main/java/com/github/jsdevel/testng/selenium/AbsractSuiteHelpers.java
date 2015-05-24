@@ -61,7 +61,8 @@ class AbsractSuiteHelpers {
     }
 
     Class<PF> pageFactoryClass = (Class<PF>) abstractSuite.getActualTypeArguments()[0];
-    context.setPageFactory(PageFactoryProxy.newInstance(pageFactoryClass, context));
+    context.setPageFactory(PageFactoryProxyFactory.getPageFactoryProxy(
+        pageFactoryClass, context));
   } 
 
   static void addScreensize(MethodContextImpl context) {

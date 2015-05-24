@@ -6,18 +6,18 @@ import java.net.URL;
 import org.openqa.selenium.WebDriver;
 
 /**
- * An implementation of {@link Page} that is configured and initialized by
+ * An implementation of {@link OldPage} that is configured and initialized by
  * {@link AbstractSuite}.
  * 
  * 
  * @param <P> The AbstractPage that extends this.
- * @param <PF> The PageFactory that build this Page.
- * @see Page
+ * @param <PF> The PageFactory that build this OldPage.
+ * @see OldPage
  * @author Joe Spencer
  * 
  */
 public abstract class AbstractPage<P extends AbstractPage,
-                                   PF extends PageFactory> implements Page<P, PF> {
+                                   PF extends PageFactory> implements OldPage<P, PF> {
   private MethodContext context;
   private String endpoint;
   private URL initialUrl;
@@ -40,7 +40,7 @@ public abstract class AbstractPage<P extends AbstractPage,
   }
 
   @Override
-  public final Page<P, PF> getPage() {
+  public final OldPage<P, PF> getPage() {
     return this;
   }
 
@@ -77,7 +77,7 @@ public abstract class AbstractPage<P extends AbstractPage,
   }
 
   /**
-   * Initializes this Page.  This is an internal operation, not meant to be
+   * Initializes this OldPage.  This is an internal operation, not meant to be
    * exposed outside of testng-selenium.
    * The initialization process is as follows:
    * 
@@ -93,7 +93,7 @@ public abstract class AbstractPage<P extends AbstractPage,
    * the AbstractPage has been initialized.  This would be a good time to wait
    * for the page to get fully setup.</li>
    * <li>Calls {@link #isPageViewableFrom(java.net.URL)} to verify that the
-   * desired URL represents this {@link Page}.</li>
+   * desired URL represents this {@link OldPage}.</li>
    * </ul>
    * 
    * @param desiredUrl

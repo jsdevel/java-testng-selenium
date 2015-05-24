@@ -1,0 +1,13 @@
+package com.github.jsdevel.testng.selenium.fixtures.pageproxyfactory;
+
+import com.github.jsdevel.testng.selenium.PageFactory;
+
+public interface FixturePageFactory extends PageFactory {
+  FixtureSimplePage getFixtureSimplePage();
+  FixturePageThatHasNestedComponents getFixturePageThatHasNestedComponents();
+  FixturePageWhosImplHasNoMatchingMethod getFixturePageWhosImplHasNoMatchingMethod();
+  FixturePageWithAComponentWhosImplHasNoMatchingMethod getFixturePageWithAComponentWhosImplHasNoMatchingMethod();
+  FixturePageThatFailsToPassTypeParametersToComponent getFixturePageThatFailsToPassTypeParametersToComponent();
+  FixturePageThatFailsToPassTypeParametersToNestedComponent getFixturePageThatFailsToPassTypeParametersToNestedComponent();
+  FixturePageThatPassesNonPageTypeParameters getFixturePageThatPassesNonPageTypeParameters(); 
+}

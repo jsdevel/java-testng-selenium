@@ -3,47 +3,20 @@ package com.github.jsdevel.testng.selenium;
 import com.github.jsdevel.testng.selenium.exceptions.PageInstantiationException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A Proxy implementation of an interface that extends PageFactory.  All methods
- of the sub interface must have a return type that directly extends
- AbstractPage.  All pages returned from this PageFactory will be initialized.
- * 
- * @author Joe Spencer
- * @param <PF> The PageFactory this Proxy wraps.
- */
-class PageFactoryProxy<PF extends PageFactory> implements InvocationHandler {
+class PageFactoryProxy implements InvocationHandler {
   private final MethodContext context;
-  private final Class<PF> pageFactoryClass;
 
-  PageFactoryProxy(Class<PF> pageFactoryClass, MethodContext context) {
+  public PageFactoryProxy(MethodContext context) {
     this.context = context;
-    this.pageFactoryClass = pageFactoryClass;
-  }
-
-  @SuppressWarnings("unchecked")
-  static <PF> PF newInstance(Class<PF> pageFactoryClass, MethodContext context) {
-    return (PF) Proxy.newProxyInstance(pageFactoryClass.getClassLoader(),
-        new Class[] {pageFactoryClass}, new PageFactoryProxy(pageFactoryClass,
-            context));
   }
 
   @Override
   @SuppressWarnings("unchecked")
   public Object invoke(Object proxy, Method pageFactoryMethod, Object[] args) throws Throwable {
     Object page = pageFactoryMethod.getReturnType().newInstance();
-
-    if (page instanceof AbstractPage) {
-      AbstractPage abstractPage = (AbstractPage) page;
-      abstractPage.initialize(getDesiredUrl(pageFactoryMethod, args), context);
-    } else {
-      throw new PageInstantiationException("Pages returned from " +
-          pageFactoryClass.getName() + " must return instances of " +
-          AbstractPage.class.getName());
-    }
 
     return page;
   }

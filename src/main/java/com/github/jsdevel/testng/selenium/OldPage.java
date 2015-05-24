@@ -6,12 +6,12 @@ import org.openqa.selenium.WebDriver;
 /**
  * Represents a page that has been configured.
  * 
- * @param <P> The configured Page.
+ * @param <P> The configured OldPage.
  * @param <PF> The PageFactory that build this page.
  * @see AbstractPage
  * @author Joe Spencer
  */
-public interface Page<P extends Page, PF extends PageFactory> {
+public interface OldPage<P extends OldPage, PF extends PageFactory> {
   /**
    * Returns the context of the Method annotated with
    * {@link org.testng.annotations.Test}.
@@ -35,16 +35,16 @@ public interface Page<P extends Page, PF extends PageFactory> {
   URL getInitialUrl();
 
   /**
-   * Returns this Page.
+   * Returns this OldPage.
    * 
-   * @return This Page.
+   * @return This OldPage.
    */
-  Page<P, PF> getPage();
+  OldPage<P, PF> getPage();
 
   /**
-   * The PageFactory instance that built this Page.
+   * The PageFactory instance that built this OldPage.
    * 
-   * @return  The PageFactory that built this Page.
+   * @return  The PageFactory that built this OldPage.
    */
   PF getPageFactory();
 
