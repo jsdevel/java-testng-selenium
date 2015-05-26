@@ -5,12 +5,12 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 class PageProxyFactory {
@@ -20,19 +20,22 @@ class PageProxyFactory {
   static void registerPage(Class<? extends Browser> pageInterface,
       Class<? extends PageFactory> pageFactoryClass) {
     if (!pageProxyBuilders.containsKey(pageInterface)) {
+      assertAllInterfacesHaveImpls(pageInterface);
       Map<Method, Class> implClasses = getImplClasses(pageInterface);
       PageProxy.Builder pageProxyBuilder = new PageProxy.Builder();
       pageProxyBuilder.currentPageInterface = pageInterface;
       pageProxyBuilder.implClasses = implClasses;
       pageProxyBuilder.methodImpls = getMethodImpls(implClasses);
+
+      //Run this before we gather returned pages to ensure the return type isn't
+      //coming from method type parameters.
+      assertNoMethodAcceptsTypeParameters(pageProxyBuilder);
+
       pageProxyBuilder.returnedPages = getReturnedPages(pageInterface,
           getTypeArguments(pageInterface, null));
       assertAllPagesAreHandledByThePageFactory(pageProxyBuilder,
           pageFactoryClass);
-
-      // TODO: add assertion against all methods having declaring interface name in method name.
-      // TODO: add assertion that all interfaces have impls
-      // TODO: assert no method accepts type parameters.
+      assertAllInterfaceMethodsHaveTheDeclaringClassNameInThem(pageProxyBuilder);
 
       pageProxyBuilders.put(pageInterface, pageProxyBuilder);
     }
@@ -75,6 +78,55 @@ class PageProxyFactory {
     return returnedPages;
   }
 
+  private static void assertAllInterfaceMethodsHaveTheDeclaringClassNameInThem (
+      PageProxy.Builder pageProxyBuilder) {
+
+    Map<Class, StringBuilder> methodsNotContainingInterfaceNamesByClass =
+        new HashMap<>();
+
+    pageProxyBuilder.methodImpls.keySet().forEach(method -> {
+      Class declaringClass = method.getDeclaringClass();
+      String simpleName = declaringClass.getSimpleName();
+      String methodName = method.getName();
+      if (methodName.indexOf(simpleName) > 0 == false) {
+        StringBuilder badMethods;
+        if (!methodsNotContainingInterfaceNamesByClass.containsKey(declaringClass)) {
+          badMethods = new StringBuilder();
+          methodsNotContainingInterfaceNamesByClass.put(declaringClass, badMethods);
+          badMethods.append(methodName);
+        } else {
+          methodsNotContainingInterfaceNamesByClass.get(declaringClass)
+              .append(", ")
+              .append(methodName);
+        }
+      }
+    });
+
+    if (methodsNotContainingInterfaceNamesByClass.size() > 0) {
+      StringBuilder msg = new StringBuilder();
+      methodsNotContainingInterfaceNamesByClass.entrySet().forEach(entry -> {
+        if (msg.length() > 0) {
+          msg.append("\n  ");
+        }
+        msg
+          .append(entry.getKey().getName())
+          .append(": ")
+          .append(entry.getValue());
+      });
+
+      throw new PageInstantiationException(
+          "The following methods failed to include the name of their declaring class in their name:\n  " +
+              msg);
+    }
+  }
+
+  private static void assertAllInterfacesHaveImpls (Class clazz) {
+    getImplClass(clazz);
+    Arrays.asList(clazz.getInterfaces()).forEach(inerface -> {
+      getImplClass(inerface);
+    });
+  }
+
   private static void assertAllPagesAreHandledByThePageFactory(
       PageProxy.Builder pageProxyBuilder,
       Class<? extends PageFactory> pageFactoryClass) {
@@ -98,6 +150,40 @@ class PageProxyFactory {
             "The following pages were not handled by " +
             pageFactoryClass.getName() + 
             ": " + pagesNotHandledByPageFactory);
+    }
+  }
+
+  private static void assertNoMethodAcceptsTypeParameters(PageProxy.Builder pageProxyBuilder) {
+    StringBuilder methodsContainingTypeParameters = new StringBuilder();
+
+    pageProxyBuilder.methodImpls.entrySet().forEach(entry -> {
+      Method inerfaceMethod = entry.getKey();
+      Method implMethod = entry.getValue();
+      List<Method> containingTypeParameters = new ArrayList<>();
+
+      if (inerfaceMethod.getTypeParameters().length > 0) {
+        containingTypeParameters.add(inerfaceMethod);
+      }
+
+      if (implMethod.getTypeParameters().length > 0) {
+        containingTypeParameters.add(implMethod);
+      }
+
+      containingTypeParameters.forEach(method -> {
+        if (methodsContainingTypeParameters.length() > 0) {
+          methodsContainingTypeParameters.append(", ");
+        }
+        methodsContainingTypeParameters
+            .append(method.getDeclaringClass().getName())
+            .append("#")
+            .append(method.getName());
+      });
+    });
+
+    if (methodsContainingTypeParameters.length() > 0) {
+        throw new PageInstantiationException(
+            "The following methods accept Type parameters: " +
+            methodsContainingTypeParameters);
     }
   }
 
@@ -127,7 +213,7 @@ class PageProxyFactory {
         methodImpls.put(method, methodImpl);
       } catch (NoSuchMethodException ex) {
         throw new PageInstantiationException(
-            "Expected to see a method with signature [" +
+            "Expected to see a public method with signature [" +
             expectedImplMethodSignature(method) + "] in " + impl.getName());
       }
     });

@@ -6,12 +6,13 @@ import com.github.jsdevel.testng.selenium.fixtures.pageproxyfactory.FixturePageN
 import com.github.jsdevel.testng.selenium.fixtures.pageproxyfactory.FixturePageThatFailsToPassTypeParametersToComponent;
 import com.github.jsdevel.testng.selenium.fixtures.pageproxyfactory.FixturePageThatFailsToPassTypeParametersToNestedComponent;
 import com.github.jsdevel.testng.selenium.fixtures.pageproxyfactory.FixturePageThatHasNestedComponents;
+import com.github.jsdevel.testng.selenium.fixtures.pageproxyfactory.FixturePageThatIncludesAComponentWithNoImpl;
 import com.github.jsdevel.testng.selenium.fixtures.pageproxyfactory.FixturePageThatPassesNonPageTypeParameters;
 import com.github.jsdevel.testng.selenium.fixtures.pageproxyfactory.FixturePageWhosImplHasNoMatchingMethod;
 import com.github.jsdevel.testng.selenium.fixtures.pageproxyfactory.FixturePageWithAComponentWhosImplHasNoMatchingMethod;
+import com.github.jsdevel.testng.selenium.fixtures.pageproxyfactory.FixturePageWithMethodNotIncludingSimpleNameOfDeclaringClassInMethodName;
+import com.github.jsdevel.testng.selenium.fixtures.pageproxyfactory.FixturePageWithTypeParametersInMethods;
 import com.github.jsdevel.testng.selenium.fixtures.pageproxyfactory.FixtureSimplePage;
-import java.util.HashSet;
-import java.util.Set;
 import static org.testng.AssertJUnit.assertNotNull;
 import org.testng.annotations.Test;
 
@@ -33,12 +34,12 @@ public class PageProxyFactoryITest {
     registerPage(FixturePageThatHasNestedComponents.class);
   }
 
-  @Test(expectedExceptions = PageInstantiationException.class, expectedExceptionsMessageRegExp = "Expected to see a method with signature \\[void doSomething\\(\\)\\] in com.github.jsdevel.testng.selenium.fixtures.pageproxyfactory.FixturePageWhosImplHasNoMatchingMethodImpl")
+  @Test(expectedExceptions = PageInstantiationException.class, expectedExceptionsMessageRegExp = "Expected to see a public method with signature \\[void doSomethingOnFixturePageWhosImplHasNoMatchingMethod\\(\\)\\] in com.github.jsdevel.testng.selenium.fixtures.pageproxyfactory.FixturePageWhosImplHasNoMatchingMethodImpl")
   public void we_should_throw_an_exception_if_the_page_interface_method_has_no_matching_method_in_the_impl() {
     registerPage(FixturePageWhosImplHasNoMatchingMethod.class);
   }
 
-  @Test(expectedExceptions = PageInstantiationException.class, expectedExceptionsMessageRegExp = "Expected to see a method with signature \\[void doSomething\\(\\)\\] in com.github.jsdevel.testng.selenium.fixtures.pageproxyfactory.FixtureComponentWithAMethodNotMatchedInImplImpl")
+  @Test(expectedExceptions = PageInstantiationException.class, expectedExceptionsMessageRegExp = "Expected to see a public method with signature \\[void doSomethingOnFixtureComponentWithAMethodNotMatchedInImpl\\(\\)\\] in com.github.jsdevel.testng.selenium.fixtures.pageproxyfactory.FixtureComponentWithAMethodNotMatchedInImplImpl")
   public void we_should_throw_an_exception_if_the_page_interface_has_a_component_without_a_matching_method_in_its_impl() {
     registerPage(FixturePageWithAComponentWhosImplHasNoMatchingMethod.class);
   }
@@ -63,8 +64,20 @@ public class PageProxyFactoryITest {
     registerPage(FixturePageNotHandledByPageFactory.class);
   }
 
+  @Test(expectedExceptions = PageInstantiationException.class, expectedExceptionsMessageRegExp = "The following methods failed to include the name of their declaring class in their name:\\n  com.github.jsdevel.testng.selenium.fixtures.pageproxyfactory.FixturePageWithMethodNotIncludingSimpleNameOfDeclaringClassInMethodName: doAasd")
+  public void we_should_throw_an_exception_if_a_page_contains_a_method_with_a_name_not_including_the_simple_name_of_its_declaring_class() {
+    registerPage(FixturePageWithMethodNotIncludingSimpleNameOfDeclaringClassInMethodName.class);
+  }
 
+  @Test(expectedExceptions = PageInstantiationException.class, expectedExceptionsMessageRegExp = "Could not load com.github.jsdevel.testng.selenium.fixtures.pageproxyfactory.FixtureComponentWithoutImplImpl\\.  Does it exist\\?")
+  public void we_should_throw_an_exception_if_a_page_includes_components_with_no_impl() {
+    registerPage(FixturePageThatIncludesAComponentWithNoImpl.class);
+  }
 
+  @Test(expectedExceptions = PageInstantiationException.class, expectedExceptionsMessageRegExp = "The following methods accept Type parameters: com.github.jsdevel.testng.selenium.fixtures.pageproxyfactory.FixturePageWithTypeParametersInMethods#doSomethingOnFixturePageWithTypeParametersInMethods, com.github.jsdevel.testng.selenium.fixtures.pageproxyfactory.FixtureComponentWithTypeParametersInMethodName#doSomethingOnFixtureComponentWithTypeParametersInMethodName, com.github.jsdevel.testng.selenium.fixtures.pageproxyfactory.FixtureComponentWithTypeParametersInMethodNameImpl#doSomethingOnFixtureComponentWithTypeParametersInMethodName")
+  public void we_should_throw_an_exception_if_a_page_or_any_component_methods_use_type_parameters() {
+    registerPage(FixturePageWithTypeParametersInMethods.class);
+  }
 
 
 
