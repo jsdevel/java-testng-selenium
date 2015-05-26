@@ -40,12 +40,6 @@ class PageFactoryProxyFactory {
   }
 
   private static void registerPages(Class pageFactoryProxyClass) {
-    Set<Class<? extends Browser>> allowedPages = new HashSet<>();
-
-    Arrays.asList(pageFactoryProxyClass.getMethods()).forEach(method -> {
-      allowedPages.add((Class<? extends Browser>)method.getReturnType());
-    });
-
     Arrays.asList(pageFactoryProxyClass.getMethods()).forEach(method -> {
       PageProxyFactory.registerPage(
           (Class<? extends Browser>) method.getReturnType(),
@@ -58,6 +52,7 @@ class PageFactoryProxyFactory {
     assertPageFactoryProxyClassDoesNotHaveTypeParameters(pageFactoryProxyClass);
     assertPageFactoryProxyClassHasAtLeast1Method(pageFactoryProxyClass);
     assertPageFactoryProxyClassHasNoMethodWithTypeParameters(pageFactoryProxyClass);
+    assertPageFactoryProxyClassHasMethodHaveThePageNameInTheirName(pageFactoryProxyClass);
     assertPageFactoryProxyClassMethodsReturnAssignablesOfPage(pageFactoryProxyClass);
     assertPageFactoryProxyClassMethodsAreProperlyNamed(pageFactoryProxyClass);
     assertPageFactoryProxyClassHasAtLeaseOneFactoryMethodWithNoParametersForEachPage(pageFactoryProxyClass);
@@ -108,8 +103,8 @@ class PageFactoryProxyFactory {
     if (methodsThatDoNotReturnPage.length() > 0) {
       throw new PageFactoryInstantiationException(
           pageFactoryProxyClass.getName() +
-          " contains the following methods that do not return instances" +
-          " of Page: " + methodsThatDoNotReturnPage);
+          " contains the following methods that do not return page instances" +
+          ": " + methodsThatDoNotReturnPage);
     }
   }
 
@@ -156,6 +151,30 @@ class PageFactoryProxyFactory {
           "The following methods accept Type parameters in " +
           pageFactoryProxyClass.getName() +
           ": " + methodsThatAcceptTypeParameters);
+    }
+  }
+
+  public static void assertPageFactoryProxyClassHasMethodHaveThePageNameInTheirName(Class pageFactoryProxyClass) {
+    StringBuilder methodsThatDoNotHaveThePageNameInTheirName = new StringBuilder();
+    Arrays.asList(pageFactoryProxyClass.getMethods()).stream()
+        .sorted((Method a, Method b) -> a.getName().compareTo(b.getName()))
+        .forEach(method -> {
+          Class returnType = method.getReturnType();
+          if (method.getName().indexOf(returnType.getSimpleName()) > 0 == false) {
+            if (methodsThatDoNotHaveThePageNameInTheirName.length() > 0) {
+              methodsThatDoNotHaveThePageNameInTheirName.append(", ");              
+            }
+
+            methodsThatDoNotHaveThePageNameInTheirName.append(getMethodSignature(method));
+          }
+        });
+
+    if (methodsThatDoNotHaveThePageNameInTheirName.length() > 0) {
+      throw new PageFactoryInstantiationException(
+          "The following methods in " +
+           pageFactoryProxyClass.getName() + 
+          " did not contain the name of their page " +
+          "in their name: " + methodsThatDoNotHaveThePageNameInTheirName);
     }
   }
 
@@ -208,7 +227,7 @@ class PageFactoryProxyFactory {
     if (pagesThatUseTypeParameters.length() > 0) {
       throw new PageFactoryInstantiationException(
           "Pages are not allowed to accept Type Parameters." +
-          "  The following Pages use them: " +
+          "  The following pages use them: " +
           pagesThatUseTypeParameters);
     }
   }

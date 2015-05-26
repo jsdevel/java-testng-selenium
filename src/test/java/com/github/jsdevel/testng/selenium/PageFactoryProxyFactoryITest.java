@@ -6,8 +6,9 @@ import com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.Fixtu
 import com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryThatReturnsClasses;
 import com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryThatReturnsNoImpls;
 import com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryWithAMethodThatAcceptsTypeParameters;
+import com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryWithMethodsThatDoNotHaveTheirPageNameInTheirName;
 import com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryWithTypeParameters;
-import com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryWithMethodsThatDoNotReturnPage;
+import com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryWithMethodsThatDoNotReturnAPage;
 import com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryWithMethodsThatReturnPagesWithTypeParameters;
 import com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryWithUnhandledParameterTypes;
 import com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryWithoutDefaultFactoryMethods;
@@ -36,9 +37,9 @@ public class PageFactoryProxyFactoryITest {
     PageFactoryProxyFactory.getPageFactoryProxy(FixturePageFactoryClass.class, context);
   }
 
-  @Test(expectedExceptions = PageFactoryInstantiationException.class, expectedExceptionsMessageRegExp = "com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryWithMethodsThatDoNotReturnPage contains the following methods that do not return instances of Page: foo")
+  @Test(expectedExceptions = PageFactoryInstantiationException.class, expectedExceptionsMessageRegExp = "com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryWithMethodsThatDoNotReturnAPage contains the following methods that do not return page instances: getString")
   public void it_should_throw_an_exception_when_given_an_interface_that_has_methods_that_do_not_return_instances_of_Page() {
-    PageFactoryProxyFactory.getPageFactoryProxy(FixturePageFactoryWithMethodsThatDoNotReturnPage.class, context);
+    PageFactoryProxyFactory.getPageFactoryProxy(FixturePageFactoryWithMethodsThatDoNotReturnAPage.class, context);
   }
 
   @Test(expectedExceptions = PageFactoryInstantiationException.class, expectedExceptionsMessageRegExp = "PageFactories must declare at least 1 method.  0 methods declared in com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryWithoutMethods")
@@ -46,7 +47,7 @@ public class PageFactoryProxyFactoryITest {
     PageFactoryProxyFactory.getPageFactoryProxy(FixturePageFactoryWithoutMethods.class, context);
   }
 
-  @Test(expectedExceptions = PageFactoryInstantiationException.class, expectedExceptionsMessageRegExp = "The following methods in com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryWithoutProperMethodNames were not named the name of the page with a prefix of get: getBoo, getFoo")
+  @Test(expectedExceptions = PageFactoryInstantiationException.class, expectedExceptionsMessageRegExp = "The following methods in com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryWithoutProperMethodNames were not named the name of the page with a prefix of get: geFixtureHomePage")
   public void it_should_throw_an_exception_if_any_method_is_not_a_combination_of_get_plus_the_page_name() {
     PageFactoryProxyFactory.getPageFactoryProxy(FixturePageFactoryWithoutProperMethodNames.class, context);
   }
@@ -71,7 +72,7 @@ public class PageFactoryProxyFactoryITest {
     PageFactoryProxyFactory.getPageFactoryProxy(FixturePageFactoryWithTypeParameters.class, context);
   }
 
-  @Test(expectedExceptions = PageFactoryInstantiationException.class, expectedExceptionsMessageRegExp = "Pages are not allowed to accept Type Parameters.  The following Pages use them: com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageWithTypeParameters")
+  @Test(expectedExceptions = PageFactoryInstantiationException.class, expectedExceptionsMessageRegExp = "Pages are not allowed to accept Type Parameters.  The following pages use them: com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageWithTypeParameters")
   public void it_should_throw_an_exception_if_the_PageFactory_returns_pages_with_type_parameters() {
     PageFactoryProxyFactory.getPageFactoryProxy(FixturePageFactoryWithMethodsThatReturnPagesWithTypeParameters.class, context);
   }
@@ -84,6 +85,11 @@ public class PageFactoryProxyFactoryITest {
   @Test(expectedExceptions = PageFactoryInstantiationException.class, expectedExceptionsMessageRegExp = "The following methods accept Type parameters in com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryWithAMethodThatAcceptsTypeParameters: getFixtureHomePage\\(\\), getFixtureHomePage\\(String\\)")
   public void it_should_throw_an_exception_if_the_PageFactory_has_methods_that_accept_type_parameters() {
     PageFactoryProxyFactory.getPageFactoryProxy(FixturePageFactoryWithAMethodThatAcceptsTypeParameters.class, context);
+  }
+
+  @Test(expectedExceptions = PageFactoryInstantiationException.class, expectedExceptionsMessageRegExp = "The following methods in com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryWithMethodsThatDoNotHaveTheirPageNameInTheirName did not contain the name of their page in their name: getFixtureFoo\\(\\)")
+  public void it_should_throw_an_exception_if_any_method_names_do_not_contain_the_page_name() {
+    PageFactoryProxyFactory.getPageFactoryProxy(FixturePageFactoryWithMethodsThatDoNotHaveTheirPageNameInTheirName.class, context);
   }
 
   @Test
