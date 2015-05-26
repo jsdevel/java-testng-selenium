@@ -5,6 +5,7 @@ import com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.Fixtu
 import com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryClass;
 import com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryThatReturnsClasses;
 import com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryThatReturnsNoImpls;
+import com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryWithAMethodThatAcceptsTypeParameters;
 import com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryWithTypeParameters;
 import com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryWithMethodsThatDoNotReturnPage;
 import com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryWithMethodsThatReturnPagesWithTypeParameters;
@@ -78,6 +79,11 @@ public class PageFactoryProxyFactoryITest {
   @Test(expectedExceptions = PageFactoryInstantiationException.class, expectedExceptionsMessageRegExp = "The following methods return non interfaces in com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryThatReturnsClasses: getFixtureBooPageClass")
   public void it_should_throw_an_exception_if_the_PageFactory_returns_pages_that_are_not_interfaces() {
     PageFactoryProxyFactory.getPageFactoryProxy(FixturePageFactoryThatReturnsClasses.class, context);
+  }
+
+  @Test(expectedExceptions = PageFactoryInstantiationException.class, expectedExceptionsMessageRegExp = "The following methods accept Type parameters in com.github.jsdevel.testng.selenium.fixtures.pagefactoryproxyfactory.FixturePageFactoryWithAMethodThatAcceptsTypeParameters: getFixtureHomePage\\(\\), getFixtureHomePage\\(String\\)")
+  public void it_should_throw_an_exception_if_the_PageFactory_has_methods_that_accept_type_parameters() {
+    PageFactoryProxyFactory.getPageFactoryProxy(FixturePageFactoryWithAMethodThatAcceptsTypeParameters.class, context);
   }
 
   @Test

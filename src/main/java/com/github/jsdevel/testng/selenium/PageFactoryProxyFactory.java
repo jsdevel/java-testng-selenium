@@ -57,6 +57,7 @@ class PageFactoryProxyFactory {
     assertPageFactoryProxyClassIsInterface(pageFactoryProxyClass);
     assertPageFactoryProxyClassDoesNotHaveTypeParameters(pageFactoryProxyClass);
     assertPageFactoryProxyClassHasAtLeast1Method(pageFactoryProxyClass);
+    assertPageFactoryProxyClassHasNoMethodWithTypeParameters(pageFactoryProxyClass);
     assertPageFactoryProxyClassMethodsReturnAssignablesOfPage(pageFactoryProxyClass);
     assertPageFactoryProxyClassMethodsAreProperlyNamed(pageFactoryProxyClass);
     assertPageFactoryProxyClassHasAtLeaseOneFactoryMethodWithNoParametersForEachPage(pageFactoryProxyClass);
@@ -134,6 +135,27 @@ class PageFactoryProxyFactory {
           "The following pages have no default factory method (no arguments) in " +
           pageFactoryProxyClass.getName() +
           ": " + pagesThatHaveNoDefaultFactoryMethod);
+    }
+  }
+
+  private static void assertPageFactoryProxyClassHasNoMethodWithTypeParameters(Class pageFactoryProxyClass) {
+    StringBuilder methodsThatAcceptTypeParameters = new StringBuilder();
+    Arrays.asList(pageFactoryProxyClass.getMethods()).stream()
+        .sorted((Method a, Method b) -> a.getName().compareTo(b.getName()))
+        .forEach(method -> {
+          if (method.getTypeParameters().length > 0) {
+            if (methodsThatAcceptTypeParameters.length() > 0) {
+              methodsThatAcceptTypeParameters.append(", ");
+            }
+            methodsThatAcceptTypeParameters.append(getMethodSignature(method));
+          }
+        });
+
+    if (methodsThatAcceptTypeParameters.length() > 0) {
+      throw new PageFactoryInstantiationException(
+          "The following methods accept Type parameters in " +
+          pageFactoryProxyClass.getName() +
+          ": " + methodsThatAcceptTypeParameters);
     }
   }
 
@@ -281,6 +303,20 @@ class PageFactoryProxyFactory {
     } catch (ClassNotFoundException ex) {
       return false;
     }
+  }
+
+  private static String getMethodSignature(Method method) {
+    StringBuilder params = new StringBuilder();
+
+    Arrays.asList(method.getParameterTypes()).forEach(clazz -> {
+      if (params.length() > 0) {
+        params.append(", ");
+      }
+
+      params.append(clazz.getSimpleName());
+    });
+
+    return method.getName() + "(" + params + ")";
   }
 
   private static boolean hasUnHandledParamterTypes(Method method) {
